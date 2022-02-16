@@ -16,6 +16,12 @@ namespace LectureImage
             MyImage img = new MyImage("./images/test.bmp");
             Console.WriteLine(img.toString());
 
+            img.Negative();
+
+            MyImage output = new MyImage("./images/sortie.bmp");
+
+            Console.WriteLine(output.toString());
+
             /*
             byte[] myfile = File.ReadAllBytes("./Images/sortie.bmp");
             //myfile est un vecteur composé d'octets représentant les métadonnées et les données de l'image

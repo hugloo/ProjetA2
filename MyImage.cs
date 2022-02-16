@@ -83,11 +83,10 @@ namespace LectureImage
             return str;
         }
 
-
-        /* En cours d'ecriture
         public void Negative()
         {
-            Byte[] result = new byte[headerSize + height * width];
+            Byte[] result = new byte[headerSize + height * width*3];
+            Console.WriteLine("negative = " + result.Length);
 
             for (int k = 0; k < headerSize; k++)
             {
@@ -104,7 +103,7 @@ namespace LectureImage
             }
             File.WriteAllBytes("./Images/Sortie.bmp", result);
         }
-        */
+        
 
 
         public int Convertir_Endian_To_Int(byte[] tab, int indice)

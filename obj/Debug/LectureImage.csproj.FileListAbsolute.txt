@@ -1,0 +1,25 @@
+C:\Users\aellu\OneDrive\Documents\InverseCScharp\ProjetImage\LectureImage\bin\Debug\LectureImage.exe.config
+C:\Users\aellu\OneDrive\Documents\InverseCScharp\ProjetImage\LectureImage\obj\Debug\LectureImage.csprojResolveAssemblyReference.cache
+C:\Users\aellu\OneDrive\Documents\InverseCScharp\ProjetImage\LectureImage\bin\Debug\LectureImage.exe
+C:\Users\aellu\OneDrive\Documents\InverseCScharp\ProjetImage\LectureImage\bin\Debug\LectureImage.pdb
+C:\Users\aellu\OneDrive\Documents\InverseCScharp\ProjetImage\LectureImage\obj\Debug\LectureImage.exe
+C:\Users\aellu\OneDrive\Documents\InverseCScharp\ProjetImage\LectureImage\obj\Debug\LectureImage.pdb
+C:\Users\aellu\Desktop\ProjetInfo2020\Pour TD1\LectureImage\bin\Debug\LectureImage.exe.config
+C:\Users\aellu\Desktop\ProjetInfo2020\Pour TD1\LectureImage\bin\Debug\LectureImage.exe
+C:\Users\aellu\Desktop\ProjetInfo2020\Pour TD1\LectureImage\bin\Debug\LectureImage.pdb
+C:\Users\aellu\Desktop\ProjetInfo2020\Pour TD1\LectureImage\obj\Debug\LectureImage.csprojAssemblyReference.cache
+C:\Users\aellu\Desktop\ProjetInfo2020\Pour TD1\LectureImage\obj\Debug\LectureImage.exe
+C:\Users\aellu\Desktop\ProjetInfo2020\Pour TD1\LectureImage\obj\Debug\LectureImage.pdb
+C:\Users\aellul\OneDrive - De Vinci\Documents\CoursESILV2020\PSI\PSI2020\Pour TD1\LectureImage\bin\Debug\LectureImage.exe.config
+C:\Users\aellul\OneDrive - De Vinci\Documents\CoursESILV2020\PSI\PSI2020\Pour TD1\LectureImage\bin\Debug\LectureImage.exe
+C:\Users\aellul\OneDrive - De Vinci\Documents\CoursESILV2020\PSI\PSI2020\Pour TD1\LectureImage\bin\Debug\LectureImage.pdb
+C:\Users\aellul\OneDrive - De Vinci\Documents\CoursESILV2020\PSI\PSI2020\Pour TD1\LectureImage\obj\Debug\LectureImage.csprojAssemblyReference.cache
+C:\Users\aellul\OneDrive - De Vinci\Documents\CoursESILV2020\PSI\PSI2020\Pour TD1\LectureImage\obj\Debug\LectureImage.exe
+C:\Users\aellul\OneDrive - De Vinci\Documents\CoursESILV2020\PSI\PSI2020\Pour TD1\LectureImage\obj\Debug\LectureImage.pdb
+C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\LectureImage\bin\Debug\LectureImage.exe.config
+C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\LectureImage\bin\Debug\LectureImage.exe
+C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\LectureImage\bin\Debug\LectureImage.pdb
+C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\LectureImage\obj\Debug\LectureImage.csproj.AssemblyReference.cache
+C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\LectureImage\obj\Debug\LectureImage.csproj.CoreCompileInputs.cache
+C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\LectureImage\obj\Debug\LectureImage.exe
+C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\LectureImage\obj\Debug\LectureImage.pdb
