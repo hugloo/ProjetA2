@@ -13,7 +13,7 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/test.bmp");
+            MyImage img = new MyImage("./images/coco.bmp");
             Console.WriteLine(img.toString());
 
             img.Negative();

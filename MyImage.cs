@@ -32,8 +32,6 @@ namespace LectureImage
             this.fichier = fichier;
             byte[] myfile = File.ReadAllBytes(fichier);
 
-            Console.WriteLine("taille = " + myfile.Length);
-
             width = Convertir_Endian_To_Int(myfile, 18);
             height = Convertir_Endian_To_Int(myfile, 22);
 
@@ -85,26 +83,37 @@ namespace LectureImage
 
         public void Negative()
         {
-            Byte[] result = new byte[headerSize + height * width*3];
-            Console.WriteLine("negative = " + result.Length);
+            List<byte> head = new List<byte>(headerSize);
+            List<Pixel> img = new List<Pixel>(height * width);
 
             for (int k = 0; k < headerSize; k++)
             {
-                result[k] = Convert.ToByte(header[k]);
-                Console.WriteLine(result[k]);
+                head.Add(Convert.ToByte(header[k]));
             }
-            int c = headerSize;
+
             for (int i = 0; i < image.GetLength(0); i++)
             {
                 for (int j = 0; j < image.GetLength(1); j++)
                 {
-                    result[c] = Convert.ToByte(image[i, j].Rouge);                    
+                    img.Add(image[i, j].Negatif());
                 }
             }
-            File.WriteAllBytes("./Images/Sortie.bmp", result);
+            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
         }
         
-
+  
+        public List<byte> PixelToByte(List<Pixel> tab)
+        {
+            List<Byte> result = new List<byte> (tab.Count*3);
+            for(int i = 0; i < tab.Count; i++)
+            {
+                result.Add(Convert.ToByte(tab[i].Rouge));
+                result.Add(Convert.ToByte(tab[i].Vert));
+                result.Add(Convert.ToByte(tab[i].Bleu));
+            }
+            return result.ToList();
+        }
 
         public int Convertir_Endian_To_Int(byte[] tab, int indice)
         {

@@ -15,15 +15,18 @@ namespace LectureImage
         public int Rouge
         {
             get { return rouge; }
+            set { value = rouge; }
         }
 
         public int Vert
         {
             get { return vert; }
+            set { value = vert; }
         }
         public int Bleu
         {
             get { return bleu; }
+            set { value = bleu; }
         }
 
         public Pixel(int rouge, int vert, int bleu)
@@ -38,12 +41,10 @@ namespace LectureImage
             return " " + rouge + " " + vert + " " + bleu; 
         }
 
-        public void Negatif()
+        public Pixel Negatif()
         {
-        rouge = 255 - rouge;
-        vert = 255 - vert;
-        bleu = 255 - bleu;
+            return new Pixel(255 - rouge, 255 - vert, 255 - bleu);
         }
-        
+
     }
 }
