@@ -104,8 +104,6 @@ namespace LectureImage
             File.WriteAllBytes("./Images/Sortie.bmp", result);
         }
         
-
-
         public int Convertir_Endian_To_Int(byte[] tab, int indice)
         {
             int result = 0;
@@ -116,12 +114,36 @@ namespace LectureImage
             return result;
         }
 
-        public byte[] Convertir_Int_To_Endian(int val)
+        /*public void ChangerTailleImage(MyImage fichier)
         {
-            byte[] result = new byte[4];
+            Console.WriteLine("De quelle taille voulez vous avoir votre image ?");
+            Console.WriteLine("Hauteur ?");
+            int h = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Longueur ?");
+            int l = Convert.ToInt32(Console.ReadLine());
+        }
+        */
+        public byte[] Convertir_Int_To_Endian(int entier)
+        {
+            byte[] result = BitConverter.GetBytes(entier);
             return result;
         }
+        public int[] ModifierHeader(int hauteur, int largeur)
+        {
+            byte[] hauteur1 = Convertir_Int_To_Endian(hauteur);
+            //Il manque la taille du fichier à modifier
+            byte[] largeur1 = Convertir_Int_To_Endian(largeur);
+            for (int i = 0; i<4; i++)
+            {
+                header[i + 4] = hauteur1[i];
+                header[i + 8] = largeur1[i];
+            }
+            return header;
+        }
+       /* public int[] ModifierImage(int hauteur, int largeur)
+        {
 
-
+        }
+       */
     }
 }
