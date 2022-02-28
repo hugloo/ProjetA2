@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LectureImage
+﻿namespace LectureImage
 {
     class Pixel
     {
@@ -15,15 +9,18 @@ namespace LectureImage
         public int Rouge
         {
             get { return rouge; }
+            set { value = rouge; }
         }
 
         public int Vert
         {
             get { return vert; }
+            set { value = vert; }
         }
         public int Bleu
         {
             get { return bleu; }
+            set { value = bleu; }
         }
 
         public Pixel(int rouge, int vert, int bleu)
@@ -35,15 +32,84 @@ namespace LectureImage
 
         public string toString()
         {
-            return " " + rouge + " " + vert + " " + bleu; 
+            return " " + rouge + " " + vert + " " + bleu;
         }
 
-        public void Negatif()
+        public Pixel Negatif()
         {
-        rouge = 255 - rouge;
-        vert = 255 - vert;
-        bleu = 255 - bleu;
+            return new Pixel(255 - rouge, 255 - vert, 255 - bleu);
         }
-        
+        public Pixel Gris()
+        {
+            int a = 0;
+            if (rouge >= bleu && rouge >= vert)
+            {
+                if (vert <= bleu)
+                {
+                    a = (rouge + vert) / 2;
+                }
+                else if (bleu <= vert)
+                {
+                    a = (rouge + bleu) / 2;
+                }
+            }
+            else
+            {
+                if (bleu >= rouge && bleu >= vert)
+                {
+                    if (vert <= rouge)
+                    {
+                        a = (bleu + vert) / 2;
+                    }
+                    else if (rouge <= vert)
+                    {
+                        a = (rouge + bleu) / 2;
+                    }
+                }
+                else
+                {
+                    if (vert >= bleu && vert >= rouge)
+                    {
+                        if (rouge <= bleu)
+                        {
+                            a = (rouge + vert) / 2;
+                        }
+                        else if (bleu <= rouge)
+                        {
+                            a = (vert + bleu) / 2;
+                        }
+                    }
+                }
+            }
+            return new Pixel(a, a, a);
+        }
+        public Pixel NoirBlanc()
+        {
+            if (rouge >= 128)
+            {
+                rouge = 255;
+            }
+            else
+            {
+                rouge = 0;
+            }
+            if (vert >= 128)
+            {
+                vert = 255;
+            }
+            else
+            {
+                vert = 0;
+            }
+            if (bleu >= 128)
+            {
+                bleu = 255;
+            }
+            else
+            {
+                bleu = 0;
+            }
+            return new Pixel(rouge, vert, bleu);
+        }
     }
 }

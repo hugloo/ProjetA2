@@ -32,8 +32,6 @@ namespace LectureImage
             this.fichier = fichier;
             byte[] myfile = File.ReadAllBytes(fichier);
 
-            Console.WriteLine("taille = " + myfile.Length);
-
             width = Convertir_Endian_To_Int(myfile, 18);
             height = Convertir_Endian_To_Int(myfile, 22);
 
@@ -85,25 +83,76 @@ namespace LectureImage
 
         public void Negative()
         {
-            Byte[] result = new byte[headerSize + height * width*3];
-            Console.WriteLine("negative = " + result.Length);
+            List<byte> head = new List<byte>(headerSize);
+            List<Pixel> img = new List<Pixel>(height * width);
 
             for (int k = 0; k < headerSize; k++)
             {
-                result[k] = Convert.ToByte(header[k]);
-                Console.WriteLine(result[k]);
+                head.Add(Convert.ToByte(header[k]));
             }
-            int c = headerSize;
+
             for (int i = 0; i < image.GetLength(0); i++)
             {
                 for (int j = 0; j < image.GetLength(1); j++)
                 {
-                    result[c] = Convert.ToByte(image[i, j].Rouge);                    
+                    img.Add(image[i, j].Negatif());
                 }
             }
-            File.WriteAllBytes("./Images/Sortie.bmp", result);
+            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
         }
-        
+        public void NoirEtBlanc()
+        {
+            List<byte> head = new List<byte>(headerSize);
+            List<Pixel> img = new List<Pixel>(height * width);
+
+            for (int k = 0; k < headerSize; k++)
+            {
+                head.Add(Convert.ToByte(header[k]));
+            }
+
+            for (int i = 0; i < image.GetLength(0); i++)
+            {
+                for (int j = 0; j < image.GetLength(1); j++)
+                {
+                    img.Add(image[i, j].NoirBlanc());
+                }
+            }
+            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
+        }
+        public void NuancesDeGris()
+        {
+            List<byte> head = new List<byte>(headerSize);
+            List<Pixel> img = new List<Pixel>(height * width);
+
+            for (int k = 0; k < headerSize; k++)
+            {
+                head.Add(Convert.ToByte(header[k]));
+            }
+
+            for (int i = 0; i < image.GetLength(0); i++)
+            {
+                for (int j = 0; j < image.GetLength(1); j++)
+                {
+                    img.Add(image[i, j].Gris());
+                }
+            }
+            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
+        }
+        public List<byte> PixelToByte(List<Pixel> tab)
+        {
+            List<Byte> result = new List<byte> (tab.Count*3);
+            for(int i = 0; i < tab.Count; i++)
+            {
+                result.Add(Convert.ToByte(tab[i].Rouge));
+                result.Add(Convert.ToByte(tab[i].Vert));
+                result.Add(Convert.ToByte(tab[i].Bleu));
+            }
+            return result.ToList();
+        }
+
         public int Convertir_Endian_To_Int(byte[] tab, int indice)
         {
             int result = 0;
@@ -116,13 +165,191 @@ namespace LectureImage
 
         /*public void ChangerTailleImage(MyImage fichier)
         {
-            Console.WriteLine("De quelle taille voulez vous avoir votre image ?");
+            Console.WriteLine("De quelle taille voulez vous avoir votre image ? (en octet)");
             Console.WriteLine("Hauteur ?");
             int h = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Longueur ?");
             int l = Convert.ToInt32(Console.ReadLine());
+            ModifierHeader(h, l);
+            int vérification = l % 3;
+            while(vérification != 0)
+            {
+                Console.WriteLine("Taille invalide, veuillez donner une longueur multiple de 3");
+                l = Convert.ToInt32(Console.ReadLine());
+                vérification = l % 3;
+            }
+            int pixels_rajoutés = 0;
+            Pixel[,] pixel2 = null;
+            if (vérification > image.GetLength(1))
+            {
+                pixels_rajoutés = (vérification - image.GetLength(1)) / 2;
+                pixel2 = new Pixel[image.GetLength(0), image.GetLength(1) + 2 * pixels_rajoutés];
+                for (int i = 0; i < pixel2.GetLength(0); i++)
+                {
+                    for (int j = 0; j < pixel2.GetLength(1); j++)
+                    {
+                        if (j <= pixels_rajoutés)
+                        {
+                            pixel2[i, j] = image[i, 1];
+                        }
+                        else
+                        {
+                            if (j >= image.GetLength(1))
+                            {
+                                pixel2[i, j] = image[i, image.GetLength(1)-1];
+                            }
+                            else
+                            {
+                                pixel2[i, j + pixels_rajoutés] = image[i, j];
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if(vérification == image.GetLength(1))
+                {
+                    pixel2 = new Pixel[image.GetLength(0), image.GetLength(1)];
+                    for (int i = 0; i <pixel2.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < pixel2.GetLength(1); j++)
+                        {
+                            pixel2[i, j] = image[i, j];
+                        }
+                    }
+                }
+                else
+                {
+                    pixels_rajoutés = (((vérification - image.GetLength(1)) / 2)^2)^(1/2);
+                    pixel2 = new Pixel[image.GetLength(0), image.GetLength(1) - 2 * pixels_rajoutés];
+                    for (int i = 0; i < pixel2.GetLength(0); i++)
+                    {
+                        for (int j = 0 ; j < pixel2.GetLength(1); j++)
+                        {
+                            pixel2[i, j] = image[i, j + pixels_rajoutés]; 
+                        }
+                    }
+                }
+            }
+            pixels_rajoutés = 0;
+            Pixel[,] pixel3 = null;
+            if (h > image.GetLength(0))
+            {
+                pixels_rajoutés = (h - pixel2.GetLength(0)) / 2;
+                pixel3 = new Pixel[pixel2.GetLength(0) + 2 * pixels_rajoutés, pixel2.GetLength(1)];
+                for (int i = 0; i < pixel3.GetLength(0); i++)
+                {
+                    for (int j = 0; j < pixel3.GetLength(1); j++)
+                    {
+                        if (i <= pixels_rajoutés)
+                        {
+                            pixel3[i, j] = pixel2[0, j];
+                        }
+                        else
+                        {
+                            if (i >= pixel2.GetLength(0))
+                            {
+                                pixel3[i, j] = pixel2[pixel2.GetLength(0) - 1, j];
+                            }
+                            else
+                            {
+                                pixel3[i + pixels_rajoutés, j] = pixel2[i, j];
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (h == pixel2.GetLength(0))
+                {
+                    pixel3 = new Pixel[pixel2.GetLength(0), pixel2.GetLength(1)];
+                    for (int i = 0; i < pixel2.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < pixel2.GetLength(1); j++)
+                        {
+                            pixel3[i, j] = pixel2[i, j];
+                        }
+                    }
+                }
+                else
+                {
+                    pixels_rajoutés = (((h - pixel2.GetLength(0)) / 2) ^ 2) ^ (1 / 2);
+                    pixel2 = new Pixel[image.GetLength(0), image.GetLength(1) - 2 * pixels_rajoutés];
+                    for (int i = 0; i < pixel2.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < pixel2.GetLength(1); j++)
+                        {
+                            pixel2[i, j] = image[i + pixels_rajoutés, j];
+                        }
+                    }
+                }
+            }
+            //rajouter pour convertir cette matrice (pixel3) pour pouvoir la lire comme une image
         }
         */
+        public void Agrandir_Image(int val)
+        {
+            int l = header[4] * val;
+            int h = header[8] * val;
+            ModifierHeader(h, l);
+            List<byte> head = new List<byte>(headerSize);
+            List<Pixel> img = new List<Pixel>(height * width * val * val);
+            for (int k = 0; k < headerSize; k++)
+            {
+                head.Add(Convert.ToByte(header[k]));
+            }
+            for (int i = 0; i < image.GetLength(0); i++)
+            {
+                for (int j = 0; j < image.GetLength(1); j++)
+                {
+                    for(int k = 0; k<val;k++)
+                    {
+                        img.Add(image[i, j]);
+                    }
+
+                }
+            }
+            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
+        }
+        public void Retrécir_Image(int val)
+        {
+            if (val % 2 == 0)
+            {
+                int l = header[4] / val;
+                int h = header[8] / val;
+                ModifierHeader(h, l);
+                List<byte> head = new List<byte>(headerSize);
+                List<Pixel> img = new List<Pixel>((height * width) /(val * val));
+                for (int k = 0; k < headerSize; k++)
+                {
+                    head.Add(Convert.ToByte(header[k]));
+                }
+                int compteur_ligne = 0;
+                int compteur_colonne = 0;
+                for (int i = 0; i < image.GetLength(0); i++)
+                {
+                    for (int j = 0; j < image.GetLength(1); j++)
+                    {
+                        if(i + compteur_ligne < image.GetLength(0) && j + compteur_colonne < image.GetLength(1))
+                        {
+                            img.Add(image[i + compteur_ligne, j + compteur_colonne]);
+                            compteur_colonne += val;
+                        }
+                    }
+                    compteur_colonne = 0;
+                    compteur_ligne += val;
+                }
+                List<byte> result = head.Concat(PixelToByte(img)).ToList();
+                File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
+            }
+            else
+            {
+                Console.WriteLine("le quotient de rétrécissemnt n'est pas un mutiple de 2");
+            }
+        }
         public byte[] Convertir_Int_To_Endian(int entier)
         {
             byte[] result = BitConverter.GetBytes(entier);
