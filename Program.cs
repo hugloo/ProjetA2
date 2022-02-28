@@ -16,7 +16,7 @@ namespace LectureImage
             MyImage img = new MyImage("./images/coco.bmp");
             Console.WriteLine(img.toString());
 
-            img.NoirEtBlanc();
+            img.Miroir();
 
             MyImage output = new MyImage("./images/sortie.bmp");
 

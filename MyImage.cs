@@ -141,6 +141,26 @@ namespace LectureImage
             List<byte> result = head.Concat(PixelToByte(img)).ToList();
             File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
         }
+        public void Miroir()
+        {
+            List<byte> head = new List<byte>(headerSize);
+            List<Pixel> img = new List<Pixel>(height * width);
+
+            for (int k = 0; k < headerSize; k++)
+            {
+                head.Add(Convert.ToByte(header[k]));
+            }
+
+            for (int i = image.GetLength(0)-1 ; i >=0; i--)
+            {
+                for (int j = 0; j < image.GetLength(1); j++)
+                {
+                    img.Add(image[i, j]);
+                }
+            }
+            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
+        }
         public List<byte> PixelToByte(List<Pixel> tab)
         {
             List<Byte> result = new List<byte> (tab.Count*3);
