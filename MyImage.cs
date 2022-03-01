@@ -151,9 +151,9 @@ namespace LectureImage
                 head.Add(Convert.ToByte(header[k]));
             }
 
-            for (int i = image.GetLength(0)-1 ; i >=0; i--)
+            for (int i = 0 ; i < image.GetLength(0); i++)
             {
-                for (int j = 0; j < image.GetLength(1); j++)
+                for (int j = image.GetLength(1) - 1; j >= 0; j--)
                 {
                     img.Add(image[i, j]);
                 }
