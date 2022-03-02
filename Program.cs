@@ -16,7 +16,7 @@ namespace LectureImage
             MyImage img = new MyImage("./images/Test.bmp");
             Console.WriteLine(img.toString());
 
-            img.Agrandir_Image(4);
+            img.Agrandir_Image(2);
 
             MyImage output = new MyImage("./images/sortie.bmp");
 
