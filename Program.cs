@@ -13,10 +13,10 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/coco.bmp");
+            MyImage img = new MyImage("./images/Test.bmp");
             Console.WriteLine(img.toString());
 
-            img.Miroir();
+            img.Agrandir_Image(4);
 
             MyImage output = new MyImage("./images/sortie.bmp");
 
