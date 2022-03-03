@@ -380,18 +380,31 @@ namespace LectureImage
         {
             int l = header[4] * val;
             int h = header[8] * val;
-            //ModifierHeader(h, l);
+            ModifierHeader(h, l);
             List<byte> head = new List<byte>(headerSize);
             List<Pixel> img = new List<Pixel>(height * width * val * val);
+            byte[] head1 = new byte[headerSize];
             for (int k = 0; k < headerSize; k++)
             {
                 head.Add(Convert.ToByte(header[k]));
+                head1[k] = Convert.ToByte(header[k]);
+            }
+            int l = Convertir_Endian_To_Int(head1, 4);
+            int h = Convertir_Endian_To_Int (head1, 8);
+            l = l * val;
+            h = h * val;
+            byte[] l1 = Convertir_Int_To_Endian(l);
+            byte[] h1 = Convertir_Int_To_Endian(h);
+            for (int k = 0; k < 4; k++)
+            {
+                head[k + 4] = l1[k];
+                head[k + 8] = h1[k];
             }
             for (int i = 0; i < image.GetLength(0); i++)
             {
                 for (int j = 0; j < image.GetLength(1); j++)
                 {
-                    for(int k = 0; k<val;k++)
+                    
                     {
                         img.Add(image[i, j]);
                     }
@@ -405,14 +418,24 @@ namespace LectureImage
         {
             if (val % 2 == 0)
             {
-                int l = header[4] / val;
-                int h = header[8] / val;
-                ModifierHeader(h, l);
                 List<byte> head = new List<byte>(headerSize);
-                List<Pixel> img = new List<Pixel>((height * width) /(val * val));
+                List<Pixel> img = new List<Pixel>(height * width * val * val);
+                byte[] head1 = new byte[headerSize];
                 for (int k = 0; k < headerSize; k++)
                 {
                     head.Add(Convert.ToByte(header[k]));
+                    head1[k] = Convert.ToByte(header[k]);
+                }
+                int l = Convertir_Endian_To_Int(head1, 4);
+                int h = Convertir_Endian_To_Int(head1, 8);
+                l = l * val;
+                h = h * val;
+                byte[] l1 = Convertir_Int_To_Endian(l);
+                byte[] h1 = Convertir_Int_To_Endian(h);
+                for (int k = 0; k < 4; k++)
+                {
+                    head[k + 4] = l1[k];
+                    head[k + 8] = h1[k];
                 }
                 int compteur_ligne = 0;
                 int compteur_colonne = 0;

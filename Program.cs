@@ -13,9 +13,10 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/coco.bmp");
+            MyImage img = new MyImage("./images/Test.bmp");
             Console.WriteLine(img.toString());
 
+<<<<<<< HEAD
             int[,] flou = { { 0, 0, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0 } };
             int[,] i = { { 1/9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 } };
             int[,] t = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } , { 0, 0, 0, 0, 0 } };
@@ -24,6 +25,9 @@ namespace LectureImage
 
 
             img.MatriceDeConvultion(flou);
+=======
+            img.Agrandir_Image(2);
+>>>>>>> 23b73272d14345d872e6aad87dd2e10809224e11
 
             MyImage output = new MyImage("./images/sortie.bmp");
 
