@@ -13,8 +13,10 @@ namespace LectureImage
         int height = 0; //number of lines
         int width = 0; //number of pixels on a line 
         Pixel[,] image;
-        int[] header = new int[54];
+        byte[,] imgB;
+        byte[] header = new byte[54];
         int headerSize = 54;
+        int[,] flou = { { 0, 0, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0 } };
 
         public int Height
         {
@@ -27,11 +29,13 @@ namespace LectureImage
         }
 
 
+
+
         public MyImage(string fichier)
         {
             this.fichier = fichier;
             byte[] myfile = File.ReadAllBytes(fichier);
-
+            
             width = Convertir_Endian_To_Int(myfile, 18);
             height = Convertir_Endian_To_Int(myfile, 22);
 
@@ -44,17 +48,99 @@ namespace LectureImage
             //Console.WriteLine("h = " + height + " w = " + width);
 
             // CREATION IMAGE
+
+            imgB = new byte[height, width*3];
+            int a = headerSize;
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width*3; j++)
+                {
+                    imgB[i, j] = myfile[a];
+                    a++;
+                }
+            }
+
+
             image = new Pixel[height, width];
             int c = headerSize;
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
-                {
-                    image[i, j] = new Pixel(myfile[c], myfile[c + 1], myfile[c + 2]);                   
+                {                    
+                    image[i, j] = new Pixel(myfile[c], myfile[c + 1], myfile[c + 2]);
                     c += 3;
                 }
             }
         }
+
+        public int[,] MatriceDeConvultion(int[,] convultion)
+        {
+            int[,] matricefinal = null;
+            if (imgB != null && convultion != null)
+            {
+                int ligne = imgB.GetLength(0);
+                int colonne = imgB.GetLength(1);
+                Console.WriteLine("ligne = " + ligne + "colonne = " + colonne);
+                matricefinal = new int[ligne, colonne];
+                for (int i = 0; i < ligne; i++)
+                {
+                    for (int j = 0; j < colonne; j++)
+                    {
+                        int addition = 0;
+                        for (int k = -1; k <= 1; k++)
+                        {
+                            for (int l = -1; l <= 1; l++)
+                            {
+                                int position1 = i + k;
+                                int position2 = j + l;
+                                if (position1 < 0 || position2 < 0 || position1 >= ligne || position2 >= colonne)
+                                {
+                                }
+                                else
+                                {
+                                    addition = addition + convultion[k + 1, l + 1] * imgB[position1, position2];
+                                }
+                            }
+                        }
+                        if (addition < 0)
+                        {
+                            matricefinal[i, j] = 0;
+                        }
+                        else if (addition  > 255)
+                        {
+                            matricefinal[i, j] = 255;
+                        }
+                        else matricefinal[i, j] = addition;
+
+                    }
+                }
+                List<byte> result = new List<byte>();
+                for (int i = 0; i < matricefinal.GetLength(0); i++)
+                {
+                    for (int j = 0; j < matricefinal.GetLength(1); j++)
+                    {
+                        Console.Write(matricefinal[i, j] + " ");
+                        result.Add(Convert.ToByte(matricefinal[i, j]));
+                    }
+                    Console.WriteLine();
+                }
+                File.WriteAllBytes("./Images/Sortie.bmp", header.Concat(result).ToList().ToArray());
+            }
+
+            for (int i = 0; i < matricefinal.GetLength(0); i++)
+            {
+                for (int j = 0; j < matricefinal.GetLength(1); j++)
+                {
+                    Console.Write(matricefinal[i, j] + " ");
+                }
+                Console.WriteLine();
+            }          
+
+            return matricefinal;
+        }
+
+        
 
         public string toString()
         {
@@ -83,13 +169,7 @@ namespace LectureImage
 
         public void Negative()
         {
-            List<byte> head = new List<byte>(headerSize);
             List<Pixel> img = new List<Pixel>(height * width);
-
-            for (int k = 0; k < headerSize; k++)
-            {
-                head.Add(Convert.ToByte(header[k]));
-            }
 
             for (int i = 0; i < image.GetLength(0); i++)
             {
@@ -98,18 +178,13 @@ namespace LectureImage
                     img.Add(image[i, j].Negatif());
                 }
             }
-            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+
+            List<byte> result = header.Concat(PixelToByte(img)).ToList();
             File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
         }
         public void NoirEtBlanc()
         {
-            List<byte> head = new List<byte>(headerSize);
             List<Pixel> img = new List<Pixel>(height * width);
-
-            for (int k = 0; k < headerSize; k++)
-            {
-                head.Add(Convert.ToByte(header[k]));
-            }
 
             for (int i = 0; i < image.GetLength(0); i++)
             {
@@ -118,18 +193,12 @@ namespace LectureImage
                     img.Add(image[i, j].NoirBlanc());
                 }
             }
-            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            List<byte> result = header.Concat(PixelToByte(img)).ToList();
             File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
         }
         public void NuancesDeGris()
         {
-            List<byte> head = new List<byte>(headerSize);
             List<Pixel> img = new List<Pixel>(height * width);
-
-            for (int k = 0; k < headerSize; k++)
-            {
-                head.Add(Convert.ToByte(header[k]));
-            }
 
             for (int i = 0; i < image.GetLength(0); i++)
             {
@@ -138,18 +207,12 @@ namespace LectureImage
                     img.Add(image[i, j].Gris());
                 }
             }
-            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            List<byte> result = header.Concat(PixelToByte(img)).ToList();
             File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
         }
         public void Miroir()
         {
-            List<byte> head = new List<byte>(headerSize);
             List<Pixel> img = new List<Pixel>(height * width);
-
-            for (int k = 0; k < headerSize; k++)
-            {
-                head.Add(Convert.ToByte(header[k]));
-            }
 
             for (int i = 0 ; i < image.GetLength(0); i++)
             {
@@ -158,7 +221,7 @@ namespace LectureImage
                     img.Add(image[i, j]);
                 }
             }
-            List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            List<byte> result = header.Concat(PixelToByte(img)).ToList();
             File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
         }
         public List<byte> PixelToByte(List<Pixel> tab)
@@ -182,6 +245,10 @@ namespace LectureImage
             }
             return result;
         }
+
+
+
+
 
         /*public void ChangerTailleImage(MyImage fichier)
         {
@@ -313,7 +380,7 @@ namespace LectureImage
         {
             int l = header[4] * val;
             int h = header[8] * val;
-            ModifierHeader(h, l);
+            //ModifierHeader(h, l);
             List<byte> head = new List<byte>(headerSize);
             List<Pixel> img = new List<Pixel>(height * width * val * val);
             for (int k = 0; k < headerSize; k++)
@@ -375,7 +442,9 @@ namespace LectureImage
             byte[] result = BitConverter.GetBytes(entier);
             return result;
         }
-        public int[] ModifierHeader(int hauteur, int largeur)
+
+        
+        public byte[] ModifierHeader(int hauteur, int largeur)
         {
             byte[] hauteur1 = Convertir_Int_To_Endian(hauteur);
             //Il manque la taille du fichier à modifier
@@ -387,10 +456,6 @@ namespace LectureImage
             }
             return header;
         }
-       /* public int[] ModifierImage(int hauteur, int largeur)
-        {
-
-        }
-       */
+       
     }
 }

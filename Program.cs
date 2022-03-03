@@ -16,7 +16,14 @@ namespace LectureImage
             MyImage img = new MyImage("./images/coco.bmp");
             Console.WriteLine(img.toString());
 
-            img.Miroir();
+            int[,] flou = { { 0, 0, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0 } };
+            int[,] i = { { 1/9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 } };
+            int[,] t = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } , { 0, 0, 0, 0, 0 } };
+            int[,] test = { { 100, 100, 100, 100, 100 }, { 100, 100, 100, 100, 100 }, { 100, 100, 150, 100, 100 }, { 100, 100, 100, 100, 100 }, { 100, 100, 100, 100, 100 } };
+            int[,] iy = { { -1, -1, -1}, { -1, 8, -1}, { -1, -1, -1 } };
+
+
+            img.MatriceDeConvultion(flou);
 
             MyImage output = new MyImage("./images/sortie.bmp");
 
