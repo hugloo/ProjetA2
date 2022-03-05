@@ -14,24 +14,27 @@ namespace LectureImage
         static void Main(string[] args)
         {
             MyImage img = new MyImage("./images/Test.bmp");
-            Console.WriteLine(img.toString());
-
-<<<<<<< HEAD
-            int[,] flou = { { 0, 0, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0 } };
-            int[,] i = { { 1/9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 } };
-            int[,] t = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } , { 0, 0, 0, 0, 0 } };
-            int[,] test = { { 100, 100, 100, 100, 100 }, { 100, 100, 100, 100, 100 }, { 100, 100, 150, 100, 100 }, { 100, 100, 100, 100, 100 }, { 100, 100, 100, 100, 100 } };
-            int[,] iy = { { -1, -1, -1}, { -1, 8, -1}, { -1, -1, -1 } };
-
-
-            img.MatriceDeConvultion(flou);
-=======
-            img.Agrandir_Image(2);
->>>>>>> 23b73272d14345d872e6aad87dd2e10809224e11
-
+            img.ChangerTailleImage(2);
             MyImage output = new MyImage("./images/sortie.bmp");
 
-            Console.WriteLine(output.toString());
+            //Console.WriteLine(img.toString());
+            /*
+            <<<<<<< HEAD
+                        int[,] flou = { { 0, 0, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0 } };
+                        int[,] i = { { 1/9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 } };
+                        int[,] t = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } , { 0, 0, 0, 0, 0 } };
+                        int[,] test = { { 100, 100, 100, 100, 100 }, { 100, 100, 100, 100, 100 }, { 100, 100, 150, 100, 100 }, { 100, 100, 100, 100, 100 }, { 100, 100, 100, 100, 100 } };
+                        int[,] iy = { { -1, -1, -1}, { -1, 8, -1}, { -1, -1, -1 } };
+
+
+                        img.MatriceDeConvultion(flou);
+            =======
+                        img.Agrandir_Image(2);
+            >>>>>>> 23b73272d14345d872e6aad87dd2e10809224e11
+
+                        MyImage output = new MyImage("./images/sortie.bmp");
+
+                        Console.WriteLine(output.toString()); */
 
             /*
             byte[] myfile = File.ReadAllBytes("./Images/sortie.bmp");

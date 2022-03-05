@@ -247,46 +247,66 @@ namespace LectureImage
         }
         public void ChangerTailleImage(int valeur)
         {
-            if(valeur <= 0 )
+            int new_height = 0;
+            int new_width = 0;
+            Pixel[,] new_img = null;
+            if (valeur <= 0 )
             {
                 Console.WriteLine("Veuillez donner une valeur positive différente de 0");
                 int new_val = Convert.ToInt32(Console.ReadLine());
                 ChangerTailleImage(new_val);
             }
-            if (valeur < 1)
+            else
             {
-                int val_réduction = 1 / valeur;
-                Pixel[,] new_img = new Pixel[height / val_réduction, width / val_réduction];
-                for (int i = 0; i < new_img.GetLength(0); i++)
+                if (valeur < 1)
                 {
-                    for (int j = 0; j < new_img.GetLength(1); j++)
+                    new_height = height * valeur;
+                    new_width = width * valeur;
+                    ModifierHeader(new_height, new_width);
+                    ModifierHeader(new_height, new_width);
+                    new_img = new Pixel[height * valeur, width * valeur];
+                    for (int i = 0; i < new_img.GetLength(0); i++)
                     {
-                        for (int k = 0; k < valeur; k++)
+                        for (int j = 0; j < new_img.GetLength(1); j++)
                         {
-                            
+                                new_img[i, j] = image[i / valeur, j / valeur];
                         }
                     }
                 }
-            }
-            if(valeur >= 1)
-            {
-                Pixel[,] new_img = new Pixel[height * valeur,width * valeur];
-                int compteur_ligne = 0;
-                int compteur_colonne = 0;
-                for (int i = 0; i < image.GetLength(0); i++)
+                if (valeur >= 1)
                 {
-                    for (int j = 0; j < image.GetLength(1); j++)
+                    new_height = height * valeur;
+                    new_width = width * valeur;
+                    ModifierHeader(new_height, new_width);
+                    new_img = new Pixel[new_height, new_width];
+                    int compteur_ligne = 0;
+                    int compteur_colonne = 0;
+                    for (int i = 0; i < image.GetLength(0); i++)
                     {
-                        for(int k = 0; k < valeur; k++)
+                        for (int j = 0; j < image.GetLength(1); j++)
                         {
-                            new_img[i + k, j] = image[i, j];
-                            new_img[i, j + k] = image[i, j];
+                            for (int k = 0; k < valeur; k++)
+                            {
+                                new_img[i + k, j] = image[i, j];
+                                new_img[i, j + k] = image[i, j];
+                            }
+                            compteur_colonne += valeur;
                         }
-                        compteur_colonne += valeur;
+                        compteur_ligne += valeur;
                     }
-                    compteur_ligne += valeur;
                 }
             }
+            List<Pixel> img = new List<Pixel>(new_height * width);
+
+            for (int i = 0; i < new_img.GetLength(0); i++)
+            {
+                for (int j = 0; j < new_img.GetLength(1); j++)
+                {
+                    img.Add(new_img[i, j]);
+                }
+            }
+            List<byte> result = header.Concat(PixelToByte(img)).ToList();
+            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
         }
 
 
@@ -418,7 +438,7 @@ namespace LectureImage
             //rajouter pour convertir cette matrice (pixel3) pour pouvoir la lire comme une image
         }
         */
-        public void Agrandir_Image(int val)
+        /*public void Agrandir_Image(int val)
         {
             int l = header[4] * val;
             int h = header[8] * val;
@@ -502,6 +522,7 @@ namespace LectureImage
                 Console.WriteLine("le quotient de rétrécissemnt n'est pas un mutiple de 2");
             }
         }
+        */
         public byte[] Convertir_Int_To_Endian(int entier)
         {
             byte[] result = BitConverter.GetBytes(entier);
