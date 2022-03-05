@@ -245,7 +245,49 @@ namespace LectureImage
             }
             return result;
         }
-
+        public void ChangerTailleImage(int valeur)
+        {
+            if(valeur <= 0 )
+            {
+                Console.WriteLine("Veuillez donner une valeur positive différente de 0");
+                int new_val = Convert.ToInt32(Console.ReadLine());
+                ChangerTailleImage(new_val);
+            }
+            if (valeur < 1)
+            {
+                int val_réduction = 1 / valeur;
+                Pixel[,] new_img = new Pixel[height / val_réduction, width / val_réduction];
+                for (int i = 0; i < new_img.GetLength(0); i++)
+                {
+                    for (int j = 0; j < new_img.GetLength(1); j++)
+                    {
+                        for (int k = 0; k < valeur; k++)
+                        {
+                            
+                        }
+                    }
+                }
+            }
+            if(valeur >= 1)
+            {
+                Pixel[,] new_img = new Pixel[height * valeur,width * valeur];
+                int compteur_ligne = 0;
+                int compteur_colonne = 0;
+                for (int i = 0; i < image.GetLength(0); i++)
+                {
+                    for (int j = 0; j < image.GetLength(1); j++)
+                    {
+                        for(int k = 0; k < valeur; k++)
+                        {
+                            new_img[i + k, j] = image[i, j];
+                            new_img[i, j + k] = image[i, j];
+                        }
+                        compteur_colonne += valeur;
+                    }
+                    compteur_ligne += valeur;
+                }
+            }
+        }
 
 
 
@@ -389,8 +431,8 @@ namespace LectureImage
                 head.Add(Convert.ToByte(header[k]));
                 head1[k] = Convert.ToByte(header[k]);
             }
-            int l = Convertir_Endian_To_Int(head1, 4);
-            int h = Convertir_Endian_To_Int (head1, 8);
+            l = Convertir_Endian_To_Int(head1, 4);
+            h = Convertir_Endian_To_Int (head1, 8);
             l = l * val;
             h = h * val;
             byte[] l1 = Convertir_Int_To_Endian(l);
