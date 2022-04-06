@@ -28,14 +28,11 @@ namespace LectureImage
             get { return width; }
         }
 
-
-
-
         public MyImage(string fichier)
         {
             this.fichier = fichier;
             byte[] myfile = File.ReadAllBytes(fichier);
-            
+
             width = Convertir_Endian_To_Int(myfile, 18);
             height = Convertir_Endian_To_Int(myfile, 22);
 
@@ -49,12 +46,12 @@ namespace LectureImage
 
             // CREATION IMAGE
 
-            imgB = new byte[height, width*3];
+            imgB = new byte[height, width * 3];
             int a = headerSize;
 
             for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < width*3; j++)
+                for (int j = 0; j < width * 3; j++)
                 {
                     imgB[i, j] = myfile[a];
                     a++;
@@ -67,13 +64,90 @@ namespace LectureImage
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
-                {                    
+                {
                     image[i, j] = new Pixel(myfile[c], myfile[c + 1], myfile[c + 2]);
                     c += 3;
                 }
             }
         }
+        public int[,] MatriceConvolution(int[,] kernel)
+        {
+            int[,] resultat = null;
+            int ajustementligne = 0;
+            int ajustementcolonne = 0;
+            int addition = 0;
+            if (imgB != null && kernel != null)
+            {
+                resultat = new int[imgB.GetLength(0), imgB.GetLength(1)];
+                for (int i = 0; i < imgB.GetLength(0); i++)
+                {
+                    for (int j = 0; j < image.GetLength(1); j++)
+                    {
+                        if (i == 0 || j == 0 || j == image.GetLength(1) || i == image.GetLength(0))
+                        {
+                            resultat[i, j] = 255;
+                        }
+                        else
+                        {
+                            addition = 0;
+                            for (int k = 0; k < kernel.GetLength(0); k++)
+                            {
+                                for (int l = 0; l < kernel.GetLength(1); l++)
+                                {
+                                    if (l == 0)
+                                    {
+                                        ajustementcolonne = -1;
+                                    }
+                                    if (l == 2)
+                                    {
+                                        ajustementcolonne = 1;
+                                    }
+                                    if (k == 0)
+                                    {
+                                        ajustementligne = -1;
+                                    }
+                                    if (k == 2)
+                                    {
+                                        ajustementligne = 1;
+                                    }
+                                    addition += kernel[k, l] * imgB[i + ajustementligne, j + ajustementcolonne]; }
+                            }
+                            if (addition < 0)
+                            {
+                                resultat[i, j] = 0;
+                            }
+                            else if (addition > 255)
+                            {
+                                resultat[i, j] = 255;
+                            }
+                            else resultat[i, j] = addition;
+                        }
+                    }
+                }
+                List<byte> result = new List<byte>();
+                for (int i = 0; i < resultat.GetLength(0); i++)
+                {
+                    for (int j = 0; j < resultat.GetLength(1); j++)
+                    {
+                        Console.Write(resultat[i, j] + " ");
+                        result.Add(Convert.ToByte(resultat[i, j]));
+                    }
+                    Console.WriteLine();
+                }
+                File.WriteAllBytes("./Images/Sortie.bmp", header.Concat(result).ToList().ToArray());
+            }
 
+            for (int i = 0; i < resultat.GetLength(0); i++)
+            {
+                for (int j = 0; j < resultat.GetLength(1); j++)
+                {
+                    Console.Write(resultat[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+
+            return resultat;
+        }
         public int[,] MatriceDeConvultion(int[,] convultion)
         {
             int[,] matricefinal = null;
@@ -139,9 +213,6 @@ namespace LectureImage
 
             return matricefinal;
         }
-
-        
-
         public string toString()
         {
             string str = "";
