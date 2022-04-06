@@ -13,8 +13,10 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/Test.bmp");
-            img.ChangerTailleImage(2);
+            int[,] flou = { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
+            MyImage img = new MyImage("./images/coco.bmp");
+            img.MatriceConvolution(flou);
+            //img.ChangerTailleImage(2);
             MyImage output = new MyImage("./images/sortie.bmp");
 
             //Console.WriteLine(img.toString());

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Linq;
 
 namespace LectureImage
 {
@@ -22,12 +20,10 @@ namespace LectureImage
         {
             get { return height; }
         }
-
         public int Width
         {
             get { return width; }
         }
-
         public MyImage(string fichier)
         {
             this.fichier = fichier;
@@ -57,8 +53,6 @@ namespace LectureImage
                     a++;
                 }
             }
-
-
             image = new Pixel[height, width];
             int c = headerSize;
             for (int i = 0; i < height; i++)
@@ -79,48 +73,36 @@ namespace LectureImage
             if (imgB != null && kernel != null)
             {
                 resultat = new int[imgB.GetLength(0), imgB.GetLength(1)];
-                for (int i = 0; i < imgB.GetLength(0); i++)
+                for (int i = 1; i < imgB.GetLength(0) - 1; i++)
                 {
-                    for (int j = 0; j < image.GetLength(1); j++)
+                    for (int j = 1; j < image.GetLength(1) - 1; j++)
                     {
-                        if (i == 0 || j == 0 || j == image.GetLength(1) || i == image.GetLength(0))
+                        addition = 0;
+                        for (int k = 0; k < kernel.GetLength(0); k++)
+                        {
+                            for (int l = 0; l < kernel.GetLength(1); l++)
+                            {
+                               addition += kernel[k,l] * imgB[i-1+l,j-1+k];
+                            }
+                        }
+                        if (addition < 0)
+                        {
+                            resultat[i, j] = 0;
+                        }
+                        else if (addition > 255)
                         {
                             resultat[i, j] = 255;
                         }
-                        else
+                        else resultat[i, j] = addition;
+                    }
+                }
+                for (int i = 0; i < resultat.GetLength(0); i++)
+                {
+                    for (int j = 0; j < resultat.GetLength(1); j++)
+                    {
+                        if (i == 0 || j == 0 || j == image.GetLength(1) || i == image.GetLength(0))
                         {
-                            addition = 0;
-                            for (int k = 0; k < kernel.GetLength(0); k++)
-                            {
-                                for (int l = 0; l < kernel.GetLength(1); l++)
-                                {
-                                    if (l == 0)
-                                    {
-                                        ajustementcolonne = -1;
-                                    }
-                                    if (l == 2)
-                                    {
-                                        ajustementcolonne = 1;
-                                    }
-                                    if (k == 0)
-                                    {
-                                        ajustementligne = -1;
-                                    }
-                                    if (k == 2)
-                                    {
-                                        ajustementligne = 1;
-                                    }
-                                    addition += kernel[k, l] * imgB[i + ajustementligne, j + ajustementcolonne]; }
-                            }
-                            if (addition < 0)
-                            {
-                                resultat[i, j] = 0;
-                            }
-                            else if (addition > 255)
-                            {
-                                resultat[i, j] = 255;
-                            }
-                            else resultat[i, j] = addition;
+                            resultat[i, j] = 0;
                         }
                     }
                 }
@@ -181,7 +163,7 @@ namespace LectureImage
                         {
                             matricefinal[i, j] = 0;
                         }
-                        else if (addition  > 255)
+                        else if (addition > 255)
                         {
                             matricefinal[i, j] = 255;
                         }
@@ -209,7 +191,7 @@ namespace LectureImage
                     Console.Write(matricefinal[i, j] + " ");
                 }
                 Console.WriteLine();
-            }          
+            }
 
             return matricefinal;
         }
@@ -285,7 +267,7 @@ namespace LectureImage
         {
             List<Pixel> img = new List<Pixel>(height * width);
 
-            for (int i = 0 ; i < image.GetLength(0); i++)
+            for (int i = 0; i < image.GetLength(0); i++)
             {
                 for (int j = image.GetLength(1) - 1; j >= 0; j--)
                 {
@@ -297,8 +279,8 @@ namespace LectureImage
         }
         public List<byte> PixelToByte(List<Pixel> tab)
         {
-            List<Byte> result = new List<byte> (tab.Count*3);
-            for(int i = 0; i < tab.Count; i++)
+            List<Byte> result = new List<byte>(tab.Count * 3);
+            for (int i = 0; i < tab.Count; i++)
             {
                 result.Add(Convert.ToByte(tab[i].Rouge));
                 result.Add(Convert.ToByte(tab[i].Vert));
@@ -321,7 +303,7 @@ namespace LectureImage
             int new_height = 0;
             int new_width = 0;
             Pixel[,] new_img = null;
-            if (valeur <= 0 )
+            if (valeur <= 0)
             {
                 Console.WriteLine("Veuillez donner une valeur positive différente de 0");
                 int new_val = Convert.ToInt32(Console.ReadLine());
@@ -340,7 +322,7 @@ namespace LectureImage
                     {
                         for (int j = 0; j < new_img.GetLength(1); j++)
                         {
-                                new_img[i, j] = image[i / valeur, j / valeur];
+                            new_img[i, j] = image[i / valeur, j / valeur];
                         }
                     }
                 }
@@ -600,19 +582,19 @@ namespace LectureImage
             return result;
         }
 
-        
+
         public byte[] ModifierHeader(int hauteur, int largeur)
         {
             byte[] hauteur1 = Convertir_Int_To_Endian(hauteur);
             //Il manque la taille du fichier à modifier
             byte[] largeur1 = Convertir_Int_To_Endian(largeur);
-            for (int i = 0; i<4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 header[i + 4] = hauteur1[i];
                 header[i + 8] = largeur1[i];
             }
             return header;
         }
-       
+
     }
 }
