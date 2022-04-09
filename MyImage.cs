@@ -229,71 +229,73 @@ namespace LectureImage
         #endregion
 
 
-        public int[,] MatriceDeConvultion(int[,] convultion)
+        public Pixel[,] MatriceDeConvultion(int[,] convolution)
         {
-            int[,] matricefinal = null;
-            if (imgB != null && convultion != null)
+            Pixel[,] matricefinal = null;
+            int addition_rouge = 0;
+            int addition_vert = 0;
+            int addition_bleu = 0;
+            if (image != null && convolution != null)
             {
-                int ligne = imgB.GetLength(0);
-                int colonne = imgB.GetLength(1);
+                int ligne = image.GetLength(0);
+                int colonne = image.GetLength(1);
                 Console.WriteLine("ligne = " + ligne + "colonne = " + colonne);
-                matricefinal = new int[ligne, colonne];
+                matricefinal = new Pixel[ligne, colonne];
+                for (int i = 1; i < ligne-1; i++)
+                {
+                    for (int j = 1; j < colonne-1; j++)
+                    {
+                        addition_rouge = 0;
+                        addition_vert = 0;
+                        addition_bleu = 0;
+                        for (int k = 0;k < 3; k++) //pour une matrice de convolution 3*3
+                        {
+                            for (int l = 0; l < 3; l++)
+                            {
+                                addition_rouge += convolution[k, l] * image[i - 1 + l, j - 1 + k].Rouge;
+                                addition_bleu += convolution[k, l] * image[i - 1 + l, j - 1 + k].Bleu;
+                                addition_vert += convolution[k, l] * image[i - 1 + l, j - 1 + k].Vert;
+                            }
+                        }
+                            if (addition_rouge < 0)
+                            {
+                                addition_rouge = 0;
+                            }
+                            if (addition_rouge > 255)
+                            {
+                                addition_rouge = 255;
+                            }
+                            if (addition_bleu < 0)
+                            {
+                                addition_bleu = 0;
+                            }
+                            if (addition_bleu > 255)
+                            {
+                                addition_bleu = 255;
+                            }
+                            if (addition_vert < 0)
+                            {
+                                addition_vert = 0;
+                            }
+                            if (addition_vert > 255)
+                            {
+                                addition_vert = 255;
+                            }
+                        matricefinal[i, j] = new Pixel(addition_rouge, addition_vert, addition_bleu);
+                    }
+                }
                 for (int i = 0; i < ligne; i++)
                 {
                     for (int j = 0; j < colonne; j++)
                     {
-                        int addition = 0;
-                        for (int k = -1; k <= 1; k++) //pour une matrice de convolution 3*3
+                        if (i == 0 || i == ligne - 1 || j == 0 || j == colonne - 1)
                         {
-                            for (int l = -1; l <= 1; l++)
-                            {
-                                int position1 = i + k;
-                                int position2 = j + l;
-                                if (position1 < 0 || position2 < 0 || position1 >= ligne || position2 >= colonne)
-                                {
-                                }
-                                else
-                                {
-                                    //Console.WriteLine(addition);
-                                    addition = addition + convultion[k + 1, l + 1] * imgB[position1, position2];
-                                }
-                            }
+                            matricefinal[i, j] = new Pixel(0, 0, 0);
                         }
-                        if (addition < 0)
-                        {
-                            matricefinal[i, j] = 0;
-                        }
-                        else if (addition > 255)
-                        {
-                            matricefinal[i, j] = 255;
-                        }
-                        else matricefinal[i, j] = Convert.ToInt32(addition);
-
                     }
                 }
-
-                List<byte> result = new List<byte>();
-                for (int i = 0; i < matricefinal.GetLength(0); i++)
-                {
-                    for (int j = 0; j < matricefinal.GetLength(1); j++)
-                    {
-                        //Console.Write(matricefinal[i, j] + " ");
-                        result.Add(Convert.ToByte(matricefinal[i, j]));
-                    }
-                    //Console.WriteLine();
-                }
-                File.WriteAllBytes("./Images/Sortie.bmp", header.Concat(result).ToList().ToArray());
             }
-
-            for (int i = 0; i < matricefinal.GetLength(0); i++)
-            {
-                for (int j = 0; j < matricefinal.GetLength(1); j++)
-                {
-                    Console.Write(matricefinal[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-
+            Enregistrement(matricefinal);
             return matricefinal;
         }
 
@@ -347,134 +349,6 @@ namespace LectureImage
             ModifierHeader(result.GetLength(0), result.GetLength(1));
             Enregistrement(result2);
         }
-
-
-        /*public void ChangerTailleImage(MyImage fichier)
-        {
-            Console.WriteLine("De quelle taille voulez vous avoir votre image ? (en octet)");
-            Console.WriteLine("Hauteur ?");
-            int h = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Longueur ?");
-            int l = Convert.ToInt32(Console.ReadLine());
-            ModifierHeader(h, l);
-            int vérification = l % 3;
-            while(vérification != 0)
-            {
-                Console.WriteLine("Taille invalide, veuillez donner une longueur multiple de 3");
-                l = Convert.ToInt32(Console.ReadLine());
-                vérification = l % 3;
-            }
-            int pixels_rajoutés = 0;
-            Pixel[,] pixel2 = null;
-            if (vérification > image.GetLength(1))
-            {
-                pixels_rajoutés = (vérification - image.GetLength(1)) / 2;
-                pixel2 = new Pixel[image.GetLength(0), image.GetLength(1) + 2 * pixels_rajoutés];
-                for (int i = 0; i < pixel2.GetLength(0); i++)
-                {
-                    for (int j = 0; j < pixel2.GetLength(1); j++)
-                    {
-                        if (j <= pixels_rajoutés)
-                        {
-                            pixel2[i, j] = image[i, 1];
-                        }
-                        else
-                        {
-                            if (j >= image.GetLength(1))
-                            {
-                                pixel2[i, j] = image[i, image.GetLength(1)-1];
-                            }
-                            else
-                            {
-                                pixel2[i, j + pixels_rajoutés] = image[i, j];
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if(vérification == image.GetLength(1))
-                {
-                    pixel2 = new Pixel[image.GetLength(0), image.GetLength(1)];
-                    for (int i = 0; i <pixel2.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < pixel2.GetLength(1); j++)
-                        {
-                            pixel2[i, j] = image[i, j];
-                        }
-                    }
-                }
-                else
-                {
-                    pixels_rajoutés = (((vérification - image.GetLength(1)) / 2)^2)^(1/2);
-                    pixel2 = new Pixel[image.GetLength(0), image.GetLength(1) - 2 * pixels_rajoutés];
-                    for (int i = 0; i < pixel2.GetLength(0); i++)
-                    {
-                        for (int j = 0 ; j < pixel2.GetLength(1); j++)
-                        {
-                            pixel2[i, j] = image[i, j + pixels_rajoutés]; 
-                        }
-                    }
-                }
-            }
-            pixels_rajoutés = 0;
-            Pixel[,] pixel3 = null;
-            if (h > image.GetLength(0))
-            {
-                pixels_rajoutés = (h - pixel2.GetLength(0)) / 2;
-                pixel3 = new Pixel[pixel2.GetLength(0) + 2 * pixels_rajoutés, pixel2.GetLength(1)];
-                for (int i = 0; i < pixel3.GetLength(0); i++)
-                {
-                    for (int j = 0; j < pixel3.GetLength(1); j++)
-                    {
-                        if (i <= pixels_rajoutés)
-                        {
-                            pixel3[i, j] = pixel2[0, j];
-                        }
-                        else
-                        {
-                            if (i >= pixel2.GetLength(0))
-                            {
-                                pixel3[i, j] = pixel2[pixel2.GetLength(0) - 1, j];
-                            }
-                            else
-                            {
-                                pixel3[i + pixels_rajoutés, j] = pixel2[i, j];
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (h == pixel2.GetLength(0))
-                {
-                    pixel3 = new Pixel[pixel2.GetLength(0), pixel2.GetLength(1)];
-                    for (int i = 0; i < pixel2.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < pixel2.GetLength(1); j++)
-                        {
-                            pixel3[i, j] = pixel2[i, j];
-                        }
-                    }
-                }
-                else
-                {
-                    pixels_rajoutés = (((h - pixel2.GetLength(0)) / 2) ^ 2) ^ (1 / 2);
-                    pixel2 = new Pixel[image.GetLength(0), image.GetLength(1) - 2 * pixels_rajoutés];
-                    for (int i = 0; i < pixel2.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < pixel2.GetLength(1); j++)
-                        {
-                            pixel2[i, j] = image[i + pixels_rajoutés, j];
-                        }
-                    }
-                }
-            }
-            //rajouter pour convertir cette matrice (pixel3) pour pouvoir la lire comme une image
-        }
-        */
         public void Agrandir_Image(int val)
         {
             int l = header[4] * val;

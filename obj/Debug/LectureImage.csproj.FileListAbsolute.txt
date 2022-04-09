@@ -5,3 +5,11 @@ C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\projetBis\obj\
 C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\projetBis\obj\Debug\LectureImage.csproj.CoreCompileInputs.cache
 C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\projetBis\obj\Debug\LectureImage.exe
 C:\Users\Mulle\OneDrive\Documents\A2 - ESILV\S4\Info\TD1\Pour TD1\projetBis\obj\Debug\LectureImage.pdb
+C:\Users\hugor\source\repos\ProjetA2\bin\Debug\LectureImage.exe.config
+C:\Users\hugor\source\repos\ProjetA2\bin\Debug\LectureImage.exe
+C:\Users\hugor\source\repos\ProjetA2\bin\Debug\LectureImage.pdb
+C:\Users\hugor\source\repos\ProjetA2\obj\Debug\LectureImage.csproj.AssemblyReference.cache
+C:\Users\hugor\source\repos\ProjetA2\obj\Debug\LectureImage.csproj.SuggestedBindingRedirects.cache
+C:\Users\hugor\source\repos\ProjetA2\obj\Debug\LectureImage.csproj.CoreCompileInputs.cache
+C:\Users\hugor\source\repos\ProjetA2\obj\Debug\LectureImage.exe
+C:\Users\hugor\source\repos\ProjetA2\obj\Debug\LectureImage.pdb

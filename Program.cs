@@ -13,7 +13,7 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/Test2.bmp");
+            MyImage img = new MyImage("./images/coco.bmp");
             Console.WriteLine(img.toString());
 
 
@@ -26,9 +26,9 @@ namespace LectureImage
             int[,] iy = { { -1, -1, -1}, { -1, 5, -1}, { -1, -1, -1 } };
             float[,] ker = { { 1/16, 1/8, 1/16 }, { 1 / 16, 1 / 4, 1 / 16 }, { 1 / 16, 1 / 8, 1 / 16 } };
 
-            img.Trans();
+            img.MatriceDeConvultion(flou);
 
-            MyImage output = new MyImage("./images/test.bmp");
+            MyImage output = new MyImage("./images/sortie.bmp");
 
             //Console.WriteLine(output.toString());
 
