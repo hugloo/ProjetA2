@@ -231,7 +231,7 @@ namespace LectureImage
 
         public Pixel[,] MatriceDeConvultion(int[,] convolution)
         {
-            Pixel[,] matricefinal = null;
+            Pixel[,] matricefinale = null;
             int addition_rouge = 0;
             int addition_vert = 0;
             int addition_bleu = 0;
@@ -240,7 +240,7 @@ namespace LectureImage
                 int ligne = image.GetLength(0);
                 int colonne = image.GetLength(1);
                 Console.WriteLine("ligne = " + ligne + "colonne = " + colonne);
-                matricefinal = new Pixel[ligne, colonne];
+                matricefinale = new Pixel[ligne, colonne];
                 for (int i = 1; i < ligne-1; i++)
                 {
                     for (int j = 1; j < colonne-1; j++)
@@ -281,7 +281,7 @@ namespace LectureImage
                             {
                                 addition_vert = 255;
                             }
-                        matricefinal[i, j] = new Pixel(addition_rouge, addition_vert, addition_bleu);
+                        matricefinale[i, j] = new Pixel(addition_rouge, addition_vert, addition_bleu);
                     }
                 }
                 for (int i = 0; i < ligne; i++)
@@ -290,13 +290,13 @@ namespace LectureImage
                     {
                         if (i == 0 || i == ligne - 1 || j == 0 || j == colonne - 1)
                         {
-                            matricefinal[i, j] = new Pixel(0, 0, 0);
+                            matricefinale[i, j] = new Pixel(0, 0, 0);
                         }
                     }
                 }
             }
-            Enregistrement(matricefinal);
-            return matricefinal;
+            Enregistrement(matricefinale);
+            return matricefinale;
         }
 
         public void Rotation90()
