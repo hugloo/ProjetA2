@@ -14,10 +14,12 @@ namespace LectureImage
         int width = 0; //number of pixels on a line 
         Pixel[,] image;
         byte[,] imgB;
-        byte[] header = new byte[54];
+        List<byte> header = new List<byte> (54);
         int headerSize = 54;
         int[,] flou = { { 0, 0, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0 } };
 
+
+        #region Proprietes
         public int Height
         {
             get { return height; }
@@ -28,9 +30,9 @@ namespace LectureImage
             get { return width; }
         }
 
+        #endregion
 
-
-
+        #region Consrtucteurs et toString()
         public MyImage(string fichier)
         {
             this.fichier = fichier;
@@ -40,9 +42,9 @@ namespace LectureImage
             height = Convertir_Endian_To_Int(myfile, 22);
 
             // CREATION HEADER
-            for (int i = 0; i < 53; i++)
+            for (int i = 0; i < headerSize; i++)
             {
-                header[i] = myfile[i];
+                header.Add(myfile[i]);
             }
 
             //Console.WriteLine("h = " + height + " w = " + width);
@@ -74,74 +76,6 @@ namespace LectureImage
             }
         }
 
-        public int[,] MatriceDeConvultion(int[,] convultion)
-        {
-            int[,] matricefinal = null;
-            if (imgB != null && convultion != null)
-            {
-                int ligne = imgB.GetLength(0);
-                int colonne = imgB.GetLength(1);
-                Console.WriteLine("ligne = " + ligne + "colonne = " + colonne);
-                matricefinal = new int[ligne, colonne];
-                for (int i = 0; i < ligne; i++)
-                {
-                    for (int j = 0; j < colonne; j++)
-                    {
-                        int addition = 0;
-                        for (int k = -1; k <= 1; k++)
-                        {
-                            for (int l = -1; l <= 1; l++)
-                            {
-                                int position1 = i + k;
-                                int position2 = j + l;
-                                if (position1 < 0 || position2 < 0 || position1 >= ligne || position2 >= colonne)
-                                {
-                                }
-                                else
-                                {
-                                    addition = addition + convultion[k + 1, l + 1] * imgB[position1, position2];
-                                }
-                            }
-                        }
-                        if (addition < 0)
-                        {
-                            matricefinal[i, j] = 0;
-                        }
-                        else if (addition  > 255)
-                        {
-                            matricefinal[i, j] = 255;
-                        }
-                        else matricefinal[i, j] = addition;
-
-                    }
-                }
-                List<byte> result = new List<byte>();
-                for (int i = 0; i < matricefinal.GetLength(0); i++)
-                {
-                    for (int j = 0; j < matricefinal.GetLength(1); j++)
-                    {
-                        Console.Write(matricefinal[i, j] + " ");
-                        result.Add(Convert.ToByte(matricefinal[i, j]));
-                    }
-                    Console.WriteLine();
-                }
-                File.WriteAllBytes("./Images/Sortie.bmp", header.Concat(result).ToList().ToArray());
-            }
-
-            for (int i = 0; i < matricefinal.GetLength(0); i++)
-            {
-                for (int j = 0; j < matricefinal.GetLength(1); j++)
-                {
-                    Console.Write(matricefinal[i, j] + " ");
-                }
-                Console.WriteLine();
-            }          
-
-            return matricefinal;
-        }
-
-        
-
         public string toString()
         {
             string str = "";
@@ -167,73 +101,14 @@ namespace LectureImage
             return str;
         }
 
-        public void Negative()
-        {
-            List<Pixel> img = new List<Pixel>(height * width);
+        #endregion
 
-            for (int i = 0; i < image.GetLength(0); i++)
-            {
-                for (int j = 0; j < image.GetLength(1); j++)
-                {
-                    img.Add(image[i, j].Negatif());
-                }
-            }
+        #region Convertions et autres
 
-            List<byte> result = header.Concat(PixelToByte(img)).ToList();
-            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
-        }
-        public void NoirEtBlanc()
+        public byte[] Convertir_Int_To_Endian(int entier)
         {
-            List<Pixel> img = new List<Pixel>(height * width);
-
-            for (int i = 0; i < image.GetLength(0); i++)
-            {
-                for (int j = 0; j < image.GetLength(1); j++)
-                {
-                    img.Add(image[i, j].NoirBlanc());
-                }
-            }
-            List<byte> result = header.Concat(PixelToByte(img)).ToList();
-            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
-        }
-        public void NuancesDeGris()
-        {
-            List<Pixel> img = new List<Pixel>(height * width);
-
-            for (int i = 0; i < image.GetLength(0); i++)
-            {
-                for (int j = 0; j < image.GetLength(1); j++)
-                {
-                    img.Add(image[i, j].Gris());
-                }
-            }
-            List<byte> result = header.Concat(PixelToByte(img)).ToList();
-            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
-        }
-        public void Miroir()
-        {
-            List<Pixel> img = new List<Pixel>(height * width);
-
-            for (int i = 0 ; i < image.GetLength(0); i++)
-            {
-                for (int j = image.GetLength(1) - 1; j >= 0; j--)
-                {
-                    img.Add(image[i, j]);
-                }
-            }
-            List<byte> result = header.Concat(PixelToByte(img)).ToList();
-            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
-        }
-        public List<byte> PixelToByte(List<Pixel> tab)
-        {
-            List<Byte> result = new List<byte> (tab.Count*3);
-            for(int i = 0; i < tab.Count; i++)
-            {
-                result.Add(Convert.ToByte(tab[i].Rouge));
-                result.Add(Convert.ToByte(tab[i].Vert));
-                result.Add(Convert.ToByte(tab[i].Bleu));
-            }
-            return result.ToList();
+            byte[] result = BitConverter.GetBytes(entier);
+            return result;
         }
 
         public int Convertir_Endian_To_Int(byte[] tab, int indice)
@@ -246,8 +121,232 @@ namespace LectureImage
             return result;
         }
 
+        public void Enregistrement(Pixel[,] result)
+        {
+            File.WriteAllBytes("./Images/Sortie.bmp", header.Concat(PixelToByte(result)).ToArray());
+        }
+
+        public List<Byte> PixelToByte(Pixel[,] tab)
+        {
+            List<Byte> result = new List<Byte>(tab.GetLength(0) * 3 * tab.GetLength(1));
+            for (int i = 0; i < tab.GetLength(0); i++)
+            {
+                for (int j = 0; j < tab.GetLength(1); j++)
+                {
+                    result.Add(Convert.ToByte(tab[i, j].Rouge));
+                    result.Add(Convert.ToByte(tab[i, j].Vert));
+                    result.Add(Convert.ToByte(tab[i, j].Bleu));
+                }
+
+            }
+            return result;
+        }
+
+        public List<byte> ModifierHeader(int hauteur, int largeur)
+        {
+            byte[] hauteur1 = Convertir_Int_To_Endian(hauteur);
+            //Il manque la taille du fichier à modifier
+            byte[] largeur1 = Convertir_Int_To_Endian(largeur);
+            byte[] weight = Convertir_Int_To_Endian(height * 3 * width + headerSize);
+            byte[] weightImg = Convertir_Int_To_Endian(height * 3 * width);
+            for (int i = 0; i < 4; i++)
+            {
+                header[18 + i] = hauteur1[i];
+                header[22 + i] = largeur1[i];
+                header[2 + i] = weight[i];
+                header[34 + i] = weightImg[i];
+            }
+
+            for (int i = 0; i < header.Count; i++)
+            {
+                Console.Write(header[i] + " ");
+            }
+            return header;
+        }
+
+        #endregion
+
+        #region Modification images
+
+        public void Miroir()
+        {
+            Pixel[,] img = new Pixel[height, width];
 
 
+            for (int i = 0; i < image.GetLength(0); i++)
+            {
+                int c = 0;
+                for (int j = image.GetLength(1) - 1; j >= 0; j--, c++)
+                {
+                    img[i, c] = image[i, j];
+                }
+            }
+
+            Enregistrement(img);
+        }
+
+        public void Negative()
+        {
+            Pixel[,] result = new Pixel[height, width];
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    result[i, j] = image[i, j].Negatif();
+                }
+            }
+            Enregistrement(result);
+        }
+
+        public void NoirEtBlanc()
+        {
+            Pixel[,] img = new Pixel[height, width];
+
+            for (int i = 0; i < image.GetLength(0); i++)
+            {
+                for (int j = 0; j < image.GetLength(1); j++)
+                {
+                    img[i, j] = image[i, j].NoirBlanc();
+                }
+            }
+            Enregistrement(img);
+        }
+        public void NuancesDeGris()
+        {
+            Pixel[,] img = new Pixel[height, width];
+
+            for (int i = 0; i < image.GetLength(0); i++)
+            {
+                for (int j = 0; j < image.GetLength(1); j++)
+                {
+                    img[i, j] = image[i, j].Gris();
+                }
+            }
+            Enregistrement(img);
+        }
+
+        #endregion
+
+
+        public int[,] MatriceDeConvultion(int[,] convultion)
+        {
+            int[,] matricefinal = null;
+            if (imgB != null && convultion != null)
+            {
+                int ligne = imgB.GetLength(0);
+                int colonne = imgB.GetLength(1);
+                Console.WriteLine("ligne = " + ligne + "colonne = " + colonne);
+                matricefinal = new int[ligne, colonne];
+                for (int i = 0; i < ligne; i++)
+                {
+                    for (int j = 0; j < colonne; j++)
+                    {
+                        int addition = 0;
+                        for (int k = -1; k <= 1; k++) //pour une matrice de convolution 3*3
+                        {
+                            for (int l = -1; l <= 1; l++)
+                            {
+                                int position1 = i + k;
+                                int position2 = j + l;
+                                if (position1 < 0 || position2 < 0 || position1 >= ligne || position2 >= colonne)
+                                {
+                                }
+                                else
+                                {
+                                    //Console.WriteLine(addition);
+                                    addition = addition + convultion[k + 1, l + 1] * imgB[position1, position2];
+                                }
+                            }
+                        }
+                        if (addition < 0)
+                        {
+                            matricefinal[i, j] = 0;
+                        }
+                        else if (addition  > 255)
+                        {
+                            matricefinal[i, j] = 255;
+                        }
+                        else matricefinal[i, j] = Convert.ToInt32(addition);
+
+                    }
+                }
+
+                List<byte> result = new List<byte>();
+                for (int i = 0; i < matricefinal.GetLength(0); i++)
+                {
+                    for (int j = 0; j < matricefinal.GetLength(1); j++)
+                    {
+                        //Console.Write(matricefinal[i, j] + " ");
+                        result.Add(Convert.ToByte(matricefinal[i, j]));
+                    }
+                    //Console.WriteLine();
+                }
+                File.WriteAllBytes("./Images/Sortie.bmp", header.Concat(result).ToList().ToArray());
+            }
+
+            for (int i = 0; i < matricefinal.GetLength(0); i++)
+            {
+                for (int j = 0; j < matricefinal.GetLength(1); j++)
+                {
+                    Console.Write(matricefinal[i, j] + " ");
+                }
+                Console.WriteLine();
+            }          
+
+            return matricefinal;
+        }
+
+        public void Rotation90()
+        {
+            Pixel[,] result = new Pixel[image.GetLength(1), image.GetLength(0)];
+            int c = 0;
+            for (int i = 0; i < image.GetLength(0); i++)
+            {
+                for (int j = 0; j < image.GetLength(1); j++)
+                {
+                    Console.WriteLine("i = " + i + " j = " + j + " c = " + c);
+                    result[j, image.GetLength(0) - i - 1] = image[i, j];         
+                    
+                    //Console.Write(result[c, j].Rouge + " ");
+                    //Console.Write(result[c, j].Vert + " ");
+                    //Console.Write(result[c, j].Bleu + " ");
+                }
+                Console.WriteLine();
+            }
+            ModifierHeader(result.GetLength(0), result.GetLength(1));
+            Enregistrement(result);
+        }
+
+        public void Trans()
+        {
+            Pixel[,] result = new Pixel[image.GetLength(1), image.GetLength(0)];
+
+            var rows = image.GetLength(0);
+            var columns = image.GetLength(1);
+
+            for (var c = 0; c < columns; c++)
+            {
+                for (var r = 0; r < rows; r++)
+                {
+                    result[c, r] = image[r, c];
+                }
+            }
+
+            Pixel[,] result2 = new Pixel[image.GetLength(1), image.GetLength(0)];
+
+            int i = 0;
+            for (var c = 0; c < result.GetLength(0); c++)
+            {
+                for (var r = result.GetLength(1) - 1; r >= 0 ; r--, i++)
+                {
+                    result2[c, i] = image[i, r];
+                }
+                i = 0;
+            }
+            ModifierHeader(result.GetLength(0), result.GetLength(1));
+            Enregistrement(result2);
+        }
 
 
         /*public void ChangerTailleImage(MyImage fichier)
@@ -380,7 +479,7 @@ namespace LectureImage
         {
             int l = header[4] * val;
             int h = header[8] * val;
-            ModifierHeader(h, l);
+            //ModifierHeader(h, l);
             List<byte> head = new List<byte>(headerSize);
             List<Pixel> img = new List<Pixel>(height * width * val * val);
             byte[] head1 = new byte[headerSize];
@@ -389,8 +488,8 @@ namespace LectureImage
                 head.Add(Convert.ToByte(header[k]));
                 head1[k] = Convert.ToByte(header[k]);
             }
-            int l = Convertir_Endian_To_Int(head1, 4);
-            int h = Convertir_Endian_To_Int (head1, 8);
+            l = Convertir_Endian_To_Int(head1, 4);
+            h = Convertir_Endian_To_Int (head1, 8);
             l = l * val;
             h = h * val;
             byte[] l1 = Convertir_Int_To_Endian(l);
@@ -411,8 +510,8 @@ namespace LectureImage
 
                 }
             }
-            List<byte> result = head.Concat(PixelToByte(img)).ToList();
-            File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
+            //List<byte> result = head.Concat(PixelToByte(img)).ToList();
+            //File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
         }
         public void Retrécir_Image(int val)
         {
@@ -452,32 +551,13 @@ namespace LectureImage
                     compteur_colonne = 0;
                     compteur_ligne += val;
                 }
-                List<byte> result = head.Concat(PixelToByte(img)).ToList();
-                File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
+                //List<byte> result = head.Concat(PixelToByte(img)).ToList();
+                //File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
             }
             else
             {
                 Console.WriteLine("le quotient de rétrécissemnt n'est pas un mutiple de 2");
             }
-        }
-        public byte[] Convertir_Int_To_Endian(int entier)
-        {
-            byte[] result = BitConverter.GetBytes(entier);
-            return result;
-        }
-
-        
-        public byte[] ModifierHeader(int hauteur, int largeur)
-        {
-            byte[] hauteur1 = Convertir_Int_To_Endian(hauteur);
-            //Il manque la taille du fichier à modifier
-            byte[] largeur1 = Convertir_Int_To_Endian(largeur);
-            for (int i = 0; i<4; i++)
-            {
-                header[i + 4] = hauteur1[i];
-                header[i + 8] = largeur1[i];
-            }
-            return header;
         }
        
     }
