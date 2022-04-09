@@ -14,7 +14,7 @@ namespace LectureImage
         int width = 0; //number of pixels on a line 
         Pixel[,] image;
         byte[,] imgB;
-        List<byte> header = new List<byte> (54);
+        List<byte> header = new List<byte>(54);
         int headerSize = 54;
         int[,] flou = { { 0, 0, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0 } };
 
@@ -37,7 +37,7 @@ namespace LectureImage
         {
             this.fichier = fichier;
             byte[] myfile = File.ReadAllBytes(fichier);
-            
+
             width = Convertir_Endian_To_Int(myfile, 18);
             height = Convertir_Endian_To_Int(myfile, 22);
 
@@ -51,12 +51,12 @@ namespace LectureImage
 
             // CREATION IMAGE
 
-            imgB = new byte[height, width*3];
+            imgB = new byte[height, width * 3];
             int a = headerSize;
 
             for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < width*3; j++)
+                for (int j = 0; j < width * 3; j++)
                 {
                     imgB[i, j] = myfile[a];
                     a++;
@@ -69,7 +69,7 @@ namespace LectureImage
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
-                {                    
+                {
                     image[i, j] = new Pixel(myfile[c], myfile[c + 1], myfile[c + 2]);
                     c += 3;
                 }
@@ -263,7 +263,7 @@ namespace LectureImage
                         {
                             matricefinal[i, j] = 0;
                         }
-                        else if (addition  > 255)
+                        else if (addition > 255)
                         {
                             matricefinal[i, j] = 255;
                         }
@@ -292,7 +292,7 @@ namespace LectureImage
                     Console.Write(matricefinal[i, j] + " ");
                 }
                 Console.WriteLine();
-            }          
+            }
 
             return matricefinal;
         }
@@ -306,8 +306,8 @@ namespace LectureImage
                 for (int j = 0; j < image.GetLength(1); j++)
                 {
                     Console.WriteLine("i = " + i + " j = " + j + " c = " + c);
-                    result[j, image.GetLength(0) - i - 1] = image[i, j];         
-                    
+                    result[j, image.GetLength(0) - i - 1] = image[i, j];
+
                     //Console.Write(result[c, j].Rouge + " ");
                     //Console.Write(result[c, j].Vert + " ");
                     //Console.Write(result[c, j].Bleu + " ");
@@ -338,7 +338,7 @@ namespace LectureImage
             int i = 0;
             for (var c = 0; c < result.GetLength(0); c++)
             {
-                for (var r = result.GetLength(1) - 1; r >= 0 ; r--, i++)
+                for (var r = result.GetLength(1) - 1; r >= 0; r--, i++)
                 {
                     result2[c, i] = image[i, r];
                 }
@@ -489,7 +489,7 @@ namespace LectureImage
                 head1[k] = Convert.ToByte(header[k]);
             }
             l = Convertir_Endian_To_Int(head1, 4);
-            h = Convertir_Endian_To_Int (head1, 8);
+            h = Convertir_Endian_To_Int(head1, 8);
             l = l * val;
             h = h * val;
             byte[] l1 = Convertir_Int_To_Endian(l);
@@ -503,7 +503,7 @@ namespace LectureImage
             {
                 for (int j = 0; j < image.GetLength(1); j++)
                 {
-                    
+
                     {
                         img.Add(image[i, j]);
                     }
@@ -542,7 +542,7 @@ namespace LectureImage
                 {
                     for (int j = 0; j < image.GetLength(1); j++)
                     {
-                        if(i + compteur_ligne < image.GetLength(0) && j + compteur_colonne < image.GetLength(1))
+                        if (i + compteur_ligne < image.GetLength(0) && j + compteur_colonne < image.GetLength(1))
                         {
                             img.Add(image[i + compteur_ligne, j + compteur_colonne]);
                             compteur_colonne += val;
@@ -559,6 +559,6 @@ namespace LectureImage
                 Console.WriteLine("le quotient de rétrécissemnt n'est pas un mutiple de 2");
             }
         }
-       
+
     }
 }
