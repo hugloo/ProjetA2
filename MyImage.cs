@@ -349,44 +349,34 @@ namespace LectureImage
             ModifierHeader(result.GetLength(0), result.GetLength(1));
             Enregistrement(result2);
         }
-        public void Agrandir_Image(int val)
-        {
-            int l = header[4] * val;
-            int h = header[8] * val;
-            //ModifierHeader(h, l);
-            List<byte> head = new List<byte>(headerSize);
-            List<Pixel> img = new List<Pixel>(height * width * val * val);
-            byte[] head1 = new byte[headerSize];
-            for (int k = 0; k < headerSize; k++)
-            {
-                head.Add(Convert.ToByte(header[k]));
-                head1[k] = Convert.ToByte(header[k]);
-            }
-            l = Convertir_Endian_To_Int(head1, 4);
-            h = Convertir_Endian_To_Int(head1, 8);
-            l = l * val;
-            h = h * val;
-            byte[] l1 = Convertir_Int_To_Endian(l);
-            byte[] h1 = Convertir_Int_To_Endian(h);
-            for (int k = 0; k < 4; k++)
-            {
-                head[k + 4] = l1[k];
-                head[k + 8] = h1[k];
-            }
-            for (int i = 0; i < image.GetLength(0); i++)
-            {
-                for (int j = 0; j < image.GetLength(1); j++)
-                {
 
-                    {
-                        img.Add(image[i, j]);
-                    }
+
+        public Pixel[,] resizePixels(int w2, int h2) //Nearest Neighbor Image Scaling ne marche qu'avec H2=W2
+        {
+            Pixel[,] result = new Pixel[w2, h2];
+            int w1 = image.GetLength(1);
+            int h1 = image.GetLength(0);
+
+            double x_ratio = w1 / (double)w2;
+            double y_ratio = h1 / (double)h2;
+            int px, py;
+            for (int i = 0; i < h2; i++)
+            {
+                for (int j = 0; j < w2; j++)
+                {
+                    px = Convert.ToInt32(Math.Floor(j * x_ratio));
+                    py = Convert.ToInt32(Math.Floor(i * y_ratio));
+
+                    result[i, j] = new Pixel(image[py, px].Rouge, image[py, px].Vert, image[py, px].Bleu);
 
                 }
             }
-            //List<byte> result = head.Concat(PixelToByte(img)).ToList();
-            //File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
+            ModifierHeader(result.GetLength(0), result.GetLength(1));
+            Enregistrement(result);
+            return result;
         }
+
+
         public void Retrécir_Image(int val)
         {
             if (val % 2 == 0)

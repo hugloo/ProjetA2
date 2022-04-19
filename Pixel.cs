@@ -85,31 +85,19 @@
         }
         public Pixel NoirBlanc()
         {
-            if (rouge >= 128)
-            {
-                rouge = 255;
-            }
-            else
-            {
-                rouge = 0;
-            }
-            if (vert >= 128)
-            {
-                vert = 255;
-            }
-            else
-            {
-                vert = 0;
-            }
-            if (bleu >= 128)
-            {
-                bleu = 255;
-            }
-            else
-            {
-                bleu = 0;
-            }
+            if (rouge >= 128) rouge = 255;            
+            else rouge = 0;
+            
+            if (vert >= 128) vert = 255;            
+            else vert = 0;
+            
+            if (bleu >= 128) bleu = 255;            
+            else bleu = 0;
+           
             return new Pixel(rouge, vert, bleu);
         }
-    }
+
+        
+        
+}
 }

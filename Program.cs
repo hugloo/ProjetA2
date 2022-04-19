@@ -16,45 +16,26 @@ namespace LectureImage
             MyImage img = new MyImage("./images/coco.bmp");
             Console.WriteLine(img.toString());
 
+            int[] pixels = { 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 };
+            img.resizePixels(400, 403);
+
+
+
 
             int[,] flou = { { 1, 1, 1}, { 1, 1, 1 }, { 1, 1, 1}, };
             int[,] bords = { { 0, 1, 0 }, { 1, -4, 1 }, { 0, 1, 0 }, };
-            int[,] i = { { 1/9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 } };
-            int[,] ti = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } , { 0, 0, 0, 0, 0 } };
+            int[,] contraste = { { 0, -1, 0}, {-1, 5, -1 } , { 0, -1, 0 } };
+
+            int[,] flou2 = { { 1/9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 } };
             int[,] décalage_une_ligne_pixel_bas = { { 0, 1, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
-            int[,] test = { { 100, 100, 100, 100, 100 }, { 100, 100, 100, 100, 100 }, { 100, 100, 150, 100, 100 }, { 100, 100, 100, 100, 100 }, { 100, 100, 100, 100, 100 } };
-            int[,] iy = { { -1, -1, -1}, { -1, 5, -1}, { -1, -1, -1 } };
+            int[,] repoussage = { { -2, -1, 0}, { -1, 1, 1}, { 0, 1, 2 } };
             float[,] ker = { { 1/16, 1/8, 1/16 }, { 1 / 16, 1 / 4, 1 / 16 }, { 1 / 16, 1 / 8, 1 / 16 } };
 
-            img.MatriceDeConvultion(flou);
+            //img.MatriceDeConvultion(repoussage);
 
             MyImage output = new MyImage("./images/sortie.bmp");
 
             //Console.WriteLine(output.toString());
-
-            /*
-            byte[] myfile = File.ReadAllBytes("./Images/sortie.bmp");
-            //myfile est un vecteur composé d'octets représentant les métadonnées et les données de l'image
-
-            //Métadonnées du fichier
-            Console.WriteLine("\n Header \n");
-            for (int i = 0; i < 14; i++)
-                Console.Write(myfile[i] + " ");
-            //Métadonnées de l'image
-            Console.WriteLine("\n HEADER INFO \n");
-            for (int i = 14; i < 54; i++)
-                Console.Write(myfile[i] + " ");
-            //L'image elle-même
-            Console.WriteLine("\n IMAGE \n");
-            for (int i = 54; i < myfile.Length; i = i + 60)
-            {
-                for (int j = i; j < i + 60; j++)
-                {
-                    Console.Write(myfile[j] + " ");
-                }
-                Console.WriteLine();
-            }
-            */
 
             Console.ReadLine();
         }
