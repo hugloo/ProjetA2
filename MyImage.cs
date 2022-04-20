@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Numerics;
 
 namespace LectureImage
 {
@@ -168,6 +169,75 @@ namespace LectureImage
 
         #region Modification images
 
+        public Pixel[,] MatriceDeConvultion(int[,] convolution)
+        {
+            Pixel[,] matricefinale = null;
+            int addition_rouge = 0;
+            int addition_vert = 0;
+            int addition_bleu = 0;
+            if (image != null && convolution != null)
+            {
+                int ligne = image.GetLength(0);
+                int colonne = image.GetLength(1);
+                Console.WriteLine("ligne = " + ligne + "colonne = " + colonne);
+                matricefinale = new Pixel[ligne, colonne];
+                for (int i = 1; i < ligne - 1; i++)
+                {
+                    for (int j = 1; j < colonne - 1; j++)
+                    {
+                        addition_rouge = 0;
+                        addition_vert = 0;
+                        addition_bleu = 0;
+                        for (int k = 0; k < 3; k++) //pour une matrice de convolution 3*3
+                        {
+                            for (int l = 0; l < 3; l++)
+                            {
+                                addition_rouge += convolution[k, l] * image[i - 1 + l, j - 1 + k].Rouge;
+                                addition_bleu += convolution[k, l] * image[i - 1 + l, j - 1 + k].Bleu;
+                                addition_vert += convolution[k, l] * image[i - 1 + l, j - 1 + k].Vert;
+                            }
+                        }
+                        if (addition_rouge < 0)
+                        {
+                            addition_rouge = 0;
+                        }
+                        if (addition_rouge > 255)
+                        {
+                            addition_rouge = 255;
+                        }
+                        if (addition_bleu < 0)
+                        {
+                            addition_bleu = 0;
+                        }
+                        if (addition_bleu > 255)
+                        {
+                            addition_bleu = 255;
+                        }
+                        if (addition_vert < 0)
+                        {
+                            addition_vert = 0;
+                        }
+                        if (addition_vert > 255)
+                        {
+                            addition_vert = 255;
+                        }
+                        matricefinale[i, j] = new Pixel(addition_rouge, addition_vert, addition_bleu);
+                    }
+                }
+                for (int i = 0; i < ligne; i++)
+                {
+                    for (int j = 0; j < colonne; j++)
+                    {
+                        if (i == 0 || i == ligne - 1 || j == 0 || j == colonne - 1)
+                        {
+                            matricefinale[i, j] = new Pixel(0, 0, 0);
+                        }
+                    }
+                }
+            }
+            Enregistrement(matricefinale);
+            return matricefinale;
+        }
         public void Miroir()
         {
             Pixel[,] img = new Pixel[height, width];
@@ -228,91 +298,23 @@ namespace LectureImage
 
         #endregion
 
-
-        public Pixel[,] MatriceDeConvultion(int[,] convolution)
-        {
-            Pixel[,] matricefinale = null;
-            int addition_rouge = 0;
-            int addition_vert = 0;
-            int addition_bleu = 0;
-            if (image != null && convolution != null)
-            {
-                int ligne = image.GetLength(0);
-                int colonne = image.GetLength(1);
-                Console.WriteLine("ligne = " + ligne + "colonne = " + colonne);
-                matricefinale = new Pixel[ligne, colonne];
-                for (int i = 1; i < ligne-1; i++)
-                {
-                    for (int j = 1; j < colonne-1; j++)
-                    {
-                        addition_rouge = 0;
-                        addition_vert = 0;
-                        addition_bleu = 0;
-                        for (int k = 0;k < 3; k++) //pour une matrice de convolution 3*3
-                        {
-                            for (int l = 0; l < 3; l++)
-                            {
-                                addition_rouge += convolution[k, l] * image[i - 1 + l, j - 1 + k].Rouge;
-                                addition_bleu += convolution[k, l] * image[i - 1 + l, j - 1 + k].Bleu;
-                                addition_vert += convolution[k, l] * image[i - 1 + l, j - 1 + k].Vert;
-                            }
-                        }
-                            if (addition_rouge < 0)
-                            {
-                                addition_rouge = 0;
-                            }
-                            if (addition_rouge > 255)
-                            {
-                                addition_rouge = 255;
-                            }
-                            if (addition_bleu < 0)
-                            {
-                                addition_bleu = 0;
-                            }
-                            if (addition_bleu > 255)
-                            {
-                                addition_bleu = 255;
-                            }
-                            if (addition_vert < 0)
-                            {
-                                addition_vert = 0;
-                            }
-                            if (addition_vert > 255)
-                            {
-                                addition_vert = 255;
-                            }
-                        matricefinale[i, j] = new Pixel(addition_rouge, addition_vert, addition_bleu);
-                    }
-                }
-                for (int i = 0; i < ligne; i++)
-                {
-                    for (int j = 0; j < colonne; j++)
-                    {
-                        if (i == 0 || i == ligne - 1 || j == 0 || j == colonne - 1)
-                        {
-                            matricefinale[i, j] = new Pixel(0, 0, 0);
-                        }
-                    }
-                }
-            }
-            Enregistrement(matricefinale);
-            return matricefinale;
-        }
-
-        public void Rotation90()
+        public void Rotation(int angle)
         {
             Pixel[,] result = new Pixel[image.GetLength(1), image.GetLength(0)];
-            int c = 0;
+
+            int[,] rotationMat = { { (int)Math.Cos(angle), (int)-Math.Sin(angle) }, { (int)Math.Sin(angle), (int)Math.Cos(angle) } };
+
+            int pivotX = (int)image.GetLength(1) / 2;
+            int pivotY = (int)image.GetLength(0) / 2;            
+
             for (int i = 0; i < image.GetLength(0); i++)
             {
                 for (int j = 0; j < image.GetLength(1); j++)
                 {
-                    Console.WriteLine("i = " + i + " j = " + j + " c = " + c);
-                    result[j, image.GetLength(0) - i - 1] = image[i, j];
+                    int[,] xy_mat = { { pivotX }, { pivotY } };
+                    int[,] rotatemat = Dot(rotationMat, xy_mat);
 
-                    //Console.Write(result[c, j].Rouge + " ");
-                    //Console.Write(result[c, j].Vert + " ");
-                    //Console.Write(result[c, j].Bleu + " ");
+                    //newX = pivotX + (int)rotatemat.
                 }
                 Console.WriteLine();
             }
@@ -320,34 +322,34 @@ namespace LectureImage
             Enregistrement(result);
         }
 
-        public void Trans()
+        public static int[,] Dot(int[,] matrix1, int[,] matrix2)
         {
-            Pixel[,] result = new Pixel[image.GetLength(1), image.GetLength(0)];
+            // cahing matrix lengths for better performance  
+            var matrix1Rows = matrix1.GetLength(0);
+            var matrix1Cols = matrix1.GetLength(1);
+            var matrix2Rows = matrix2.GetLength(0);
+            var matrix2Cols = matrix2.GetLength(1);
 
-            var rows = image.GetLength(0);
-            var columns = image.GetLength(1);
+            // checking if product is defined  
+            if (matrix1Cols != matrix2Rows)
+                throw new InvalidOperationException
+                  ("Product is undefined. n columns of first matrix must equal to n rows of second matrix");
 
-            for (var c = 0; c < columns; c++)
+            // creating the final product matrix  
+            int[,] product = new int[matrix1Rows, matrix2Cols];
+
+            for (int matrix1_row = 0; matrix1_row < matrix1Rows; matrix1_row++)
             {
-                for (var r = 0; r < rows; r++)
+                for (int matrix2_col = 0; matrix2_col < matrix2Cols; matrix2_col++)
                 {
-                    result[c, r] = image[r, c];
+                    for (int matrix1_col = 0; matrix1_col < matrix1Cols; matrix1_col++)
+                    {
+                        product[matrix1_row, matrix2_col] += matrix1[matrix1_row, matrix1_col] * matrix2[matrix1_col, matrix2_col];
+                    }
                 }
             }
 
-            Pixel[,] result2 = new Pixel[image.GetLength(1), image.GetLength(0)];
-
-            int i = 0;
-            for (var c = 0; c < result.GetLength(0); c++)
-            {
-                for (var r = result.GetLength(1) - 1; r >= 0; r--, i++)
-                {
-                    result2[c, i] = image[i, r];
-                }
-                i = 0;
-            }
-            ModifierHeader(result.GetLength(0), result.GetLength(1));
-            Enregistrement(result2);
+            return product;
         }
 
 
@@ -376,53 +378,11 @@ namespace LectureImage
             return result;
         }
 
-
-        public void Retrécir_Image(int val)
+        /*
+        public int Recusivité(int z = 0)
         {
-            if (val % 2 == 0)
-            {
-                List<byte> head = new List<byte>(headerSize);
-                List<Pixel> img = new List<Pixel>(height * width * val * val);
-                byte[] head1 = new byte[headerSize];
-                for (int k = 0; k < headerSize; k++)
-                {
-                    head.Add(Convert.ToByte(header[k]));
-                    head1[k] = Convert.ToByte(header[k]);
-                }
-                int l = Convertir_Endian_To_Int(head1, 4);
-                int h = Convertir_Endian_To_Int(head1, 8);
-                l = l * val;
-                h = h * val;
-                byte[] l1 = Convertir_Int_To_Endian(l);
-                byte[] h1 = Convertir_Int_To_Endian(h);
-                for (int k = 0; k < 4; k++)
-                {
-                    head[k + 4] = l1[k];
-                    head[k + 8] = h1[k];
-                }
-                int compteur_ligne = 0;
-                int compteur_colonne = 0;
-                for (int i = 0; i < image.GetLength(0); i++)
-                {
-                    for (int j = 0; j < image.GetLength(1); j++)
-                    {
-                        if (i + compteur_ligne < image.GetLength(0) && j + compteur_colonne < image.GetLength(1))
-                        {
-                            img.Add(image[i + compteur_ligne, j + compteur_colonne]);
-                            compteur_colonne += val;
-                        }
-                    }
-                    compteur_colonne = 0;
-                    compteur_ligne += val;
-                }
-                //List<byte> result = head.Concat(PixelToByte(img)).ToList();
-                //File.WriteAllBytes("./Images/Sortie.bmp", result.ToArray());
-            }
-            else
-            {
-                Console.WriteLine("le quotient de rétrécissemnt n'est pas un mutiple de 2");
-            }
+            return Recursivité();
         }
-
+        */
     }
 }
