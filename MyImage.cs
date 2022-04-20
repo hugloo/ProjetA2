@@ -351,8 +351,20 @@ namespace LectureImage
 
             return product;
         }
-
-
+        public Pixel[,] Rotation90()
+        {
+            Pixel[,] result = new Pixel[image.GetLength(1), image.GetLength(0)];
+            for(int i = 0; i < image.GetLength(0); i++)
+            {
+                for(int j = 0; j < image.GetLength(1); j++)
+                {
+                    result[image.GetLength(1) - 1 - j, image.GetLength(0) - 1 - i] = image[i, j];
+                }
+            }
+            ModifierHeader(result.GetLength(0), result.GetLength(1));
+            Enregistrement(result);
+            return result;
+        }
         public Pixel[,] resizePixels(int w2, int h2) //Nearest Neighbor Image Scaling ne marche qu'avec H2=W2
         {
             Pixel[,] result = new Pixel[w2, h2];
@@ -377,13 +389,56 @@ namespace LectureImage
             Enregistrement(result);
             return result;
         }
-
-        /*
-        public int Recusivité(int z = 0)
+        public Pixel[,] Fractale(int hauteur, int largeur)
         {
-            return Recursivité();
+            //on dessine la fractale en entière, les variables suivantes sont la zone où l'on dessine
+            double x1 = -2.1;
+            double x2 = 0.6;
+            double y1 = -1.2;
+            double y2 = 1.2;
+
+            // taile de l'image
+            double zoom1 = largeur / (x2 - x1);
+            double zoom2 = hauteur / (y2 - y1);
+            /*Pixel[] colors = new Pixel[256];
+            for (int i = 0; i < 256; i++)
+            {
+                colors[i] = new Pixel((byte)((i >> 5) * 36), (byte)((i >> 3 & 7) * 36), (byte)((i & 3) * 85));
+            }*/
+            Pixel[,] fractale = new Pixel[hauteur, largeur];
+            for (int i =0;i<hauteur; i++)
+            {
+                for(int j = 0; j < largeur; j++)
+                {
+                    int itération = 0;
+                    Complexe z = new Complexe(0, 0);
+                    Complexe c = new Complexe(i/zoom1 + x1, j/zoom2 + y1);
+                    while (itération < 150 &&  z.Norme()< 2)
+                    {
+                        z = z.Multiplication(z);
+                        z = z.Addition(c);
+                        itération++;
+                    }
+                    //fractale[i, j] = colors[itération];
+                    if(itération == 50)
+                    {
+                        fractale[i, j].Rouge = 0;
+                        fractale[i, j].Vert = 0;
+                        fractale[i, j].Bleu = 0;
+                    }
+                    else
+                    {
+                        fractale[i, j].Rouge = 0;
+                        fractale[i, j].Vert = 0;
+                        fractale[i, j].Bleu = 255;
+                    }
+                }
+            }
+            ModifierHeader(hauteur, largeur);
+            Enregistrement(fractale);
+            return fractale; 
         }
-        */
+        
     }
 }
 

@@ -15,7 +15,7 @@ namespace LectureImage
         {
             MyImage img = new MyImage("./images/coco.bmp");
             Console.WriteLine(img.toString());
-
+            img.Fractale(100, 100);
 
             int[,] flou = { { 1, 1, 1}, { 1, 1, 1 }, { 1, 1, 1}, };
             int[,] bords = { { 0, 1, 0 }, { 1, -4, 1 }, { 0, 1, 0 }, };
@@ -26,7 +26,7 @@ namespace LectureImage
             int[,] iy = { { -1, -1, -1}, { -1, 5, -1}, { -1, -1, -1 } };
             float[,] ker = { { 1/16, 1/8, 1/16 }, { 1 / 16, 1 / 4, 1 / 16 }, { 1 / 16, 1 / 8, 1 / 16 } };
 
-            img.MatriceDeConvultion(flou);
+            //img.MatriceDeConvultion(flou);
 
             MyImage output = new MyImage("./images/sortie.bmp");
 

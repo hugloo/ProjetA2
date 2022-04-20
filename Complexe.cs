@@ -50,5 +50,11 @@ namespace LectureImage
             produit.imaginaire = imaginaire * z.reel + reel * z.imaginaire;
             return produit;
         }
+        public double Norme()
+        {
+            double norme = 0;
+            norme = Math.Sqrt(reel * reel + imaginaire*imaginaire);
+            return norme; 
+        }
     }
 }
