@@ -13,9 +13,9 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/coco.bmp");
+            MyImage img = new MyImage("./images/lena.bmp");
             Console.WriteLine(img.toString());
-            img.Fractale(100, 100);
+            img.Rotation90();
 
             int[,] flou = { { 1, 1, 1}, { 1, 1, 1 }, { 1, 1, 1}, };
             int[,] bords = { { 0, 1, 0 }, { 1, -4, 1 }, { 0, 1, 0 }, };
