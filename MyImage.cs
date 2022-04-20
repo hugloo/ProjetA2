@@ -433,10 +433,5 @@ namespace LectureImage
                 Console.WriteLine("le quotient de rétrécissemnt n'est pas un mutiple de 2");
             }
         }
-        public int Recusivité(int z = 0)
-        {
-            return Recursivité();
-        }
-
     }
 }
