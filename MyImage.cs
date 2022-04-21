@@ -361,7 +361,6 @@ namespace LectureImage
                     result[image.GetLength(1) - 1 - j, image.GetLength(0) - 1 - i] = image[i, j];
                 }
             }
-            ModifierHeader(result.GetLength(0), result.GetLength(1));
             Enregistrement(result);
             return result;
         }
