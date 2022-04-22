@@ -389,7 +389,7 @@ namespace LectureImage
             Enregistrement(result);
             return result;
         }
-        public Pixel[,] Fractale()
+        public Pixel[,] Fractale(int hauteur, int largeur)
         {
             //on dessine la fractale en entière, les variables suivantes sont la zone où l'on dessine
             double x1 = -2.1;
@@ -398,17 +398,17 @@ namespace LectureImage
             double y2 = 1.2;
 
             // taile de l'image
-            double zoom1 = width / (x2 - x1);
-            double zoom2 = height / (y2 - y1);
+            double zoom1 = largeur / (x2 - x1);
+            double zoom2 = hauteur / (y2 - y1);
             /*Pixel[] colors = new Pixel[256];
             for (int i = 0; i < 256; i++)
             {
                 colors[i] = new Pixel((byte)((i >> 5) * 36), (byte)((i >> 3 & 7) * 36), (byte)((i & 3) * 85));
             }*/
-            Pixel[,] fractale = new Pixel[height, width];
-            for (int i =0;i<height; i++)
+            Pixel[,] fractale = new Pixel[hauteur, largeur];
+            for (int i =0;i<hauteur; i++)
             {
-                for(int j = 0; j < width; j++)
+                for(int j = 0; j < largeur; j++)
                 {
                     int itération = 0;
                     Complexe z = new Complexe(0, 0);
@@ -422,15 +422,15 @@ namespace LectureImage
                     //fractale[i, j] = colors[itération];
                     if(itération == 150)
                     {
-                        fractale[i, j] = new Pixel(255, 255, 255);
+                        fractale[i, j] = new Pixel(0, 255, 0);
                     }
                     else
                     {
-                        fractale[i,j] = new Pixel(0, 0, 255);
+                        fractale[i,j] = new Pixel(0, 0, 0);
                     }
                 }
             }
-            ModifierHeader(width, height);
+            ModifierHeader(largeur, hauteur);
             Enregistrement(fractale);
             return fractale; 
         }
