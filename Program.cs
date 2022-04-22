@@ -13,7 +13,7 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/coco.bmp");
+            MyImage img = new MyImage("./images/Test.bmp");
             Console.WriteLine(img.toString());
             img.Rotation90();
 
