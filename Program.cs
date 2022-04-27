@@ -15,6 +15,7 @@ namespace LectureImage
         {
             MyImage img = new MyImage("./images/test.bmp");
             Console.WriteLine(img.toString());
+<<<<<<< HEAD
 
             int[] pixels = { 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 };
             //img.Graph();
@@ -26,6 +27,9 @@ namespace LectureImage
 
 
 
+=======
+            img.Fractale(1000,1000,800);
+>>>>>>> 9dbc2fd733b00927e6bfc9f1ca283e269d2eb322
 
             int[,] flou = { { 1, 1, 1}, { 1, 1, 1 }, { 1, 1, 1}, };
             int[,] bords = { { 0, 1, 0 }, { 1, -4, 1 }, { 0, 1, 0 }, };
@@ -36,7 +40,11 @@ namespace LectureImage
             int[,] repoussage = { { -2, -1, 0}, { -1, 1, 1}, { 0, 1, 2 } };
             float[,] ker = { { 1/16, 1/8, 1/16 }, { 1 / 16, 1 / 4, 1 / 16 }, { 1 / 16, 1 / 8, 1 / 16 } };
 
+<<<<<<< HEAD
             //img.MatriceDeConvultion(repoussage);
+=======
+            //img.MatriceDeConvultion(flou);
+>>>>>>> 9dbc2fd733b00927e6bfc9f1ca283e269d2eb322
 
             MyImage output = new MyImage("./images/sortie.bmp");
 

@@ -125,7 +125,7 @@ namespace LectureImage
             for (int i = 0; i < 4; i++)
             {
                 result += tab[indice + i] * Convert.ToInt32(Math.Pow(256, i));
-            }            
+            }
             return result;
         }
 
@@ -450,9 +450,9 @@ namespace LectureImage
         {
             string messageCode = "";
             string str = "";
-            for (int i = 0; i < phrase.Length - 1; i =  i + 2)
+            for (int i = 0; i < phrase.Length - 1; i = i + 2)
             {
-                
+
                 str = Convert.ToString(phrase[i]) + Convert.ToString(phrase[i + 1]);
                 messageCode += ChaineToBinaire(str);
                 if (phrase.Length % 2 != 0 && i == phrase.Length - 3) messageCode += ChaineToBinaire(Convert.ToString(phrase[i + 2]));
@@ -507,7 +507,7 @@ namespace LectureImage
             }
             string result = Convert.ToString(nb, 2);
             Console.WriteLine(result);
-            if(mot.Length > 1) result = Ajouter0(11 - result.Length, result);
+            if (mot.Length > 1) result = Ajouter0(11 - result.Length, result);
             else if (mot.Length == 1) result = Ajouter0(6 - result.Length, result);
 
             Console.WriteLine(result);
@@ -527,17 +527,17 @@ namespace LectureImage
             string messageCorige = "";
             messageCorige = IndicateurMode + nbChar + messageCode;
 
-            while(messageCorige.Length < 152 && i < 4)
+            while (messageCorige.Length < 152 && i < 4)
             {
                 messageCorige += "0";
                 i++;
             }
-            while(messageCorige.Length % 8 != 0) messageCorige += "0";
+            while (messageCorige.Length % 8 != 0) messageCorige += "0";
 
             string lgMax = "1110110000010001";
             int count = 0;
 
-            while(messageCorige.Length <= 152) 
+            while (messageCorige.Length <= 152)
             {
                 messageCorige += lgMax[count];
                 count++;
@@ -574,7 +574,7 @@ namespace LectureImage
 
             for (int i = 0; i < 3; i++) //3 modules par 3 modules et d'un seul module noir au centre
             {
-                for(int j = 0; j < 3; j++)
+                for (int j = 0; j < 3; j++)
                 {
                     canva[y1 + 2 + i, x1 + 2 + j] = new Pixel(0, 0, 0);
                     canva[y2 + 2 + i, x2 + 2 + j] = new Pixel(0, 0, 0);
@@ -582,6 +582,7 @@ namespace LectureImage
 
                 }
             }
+                        
 
             for (int i = 8; i < x2; i++) //motifs de synchronisation 
             {
@@ -590,15 +591,15 @@ namespace LectureImage
                     canva[i, 6] = new Pixel(0, 0, 0);
                     canva[6, i] = new Pixel(0, 0, 0);
                 }
-                else 
-                { 
+                else
+                {
                     canva[i, 6] = new Pixel(1, 1, 1);
                     canva[6, i] = new Pixel(1, 1, 1);
                 }
 
             }
 
-            canva[(4*version) + 9, 8] = new Pixel(0, 0, 0); //motif noir
+            canva[(4 * version) + 9, 8] = new Pixel(0, 0, 0); //motif noir
 
             if (version == 2)
             {
@@ -607,14 +608,14 @@ namespace LectureImage
                 //canva[y3 + 2 + i, x3 + 2 + j] = new Pixel(0, 0, 0);
             }
 
-            
+
 
             ModifierHeader(canva.GetLength(0), canva.GetLength(1));
             Enregistrement(canva);
             return canva;
         }
 
-        public Pixel BitToPixel (char bit)
+        public Pixel BitToPixel(char bit)
         {
             if (bit == '1') return new Pixel(0, 0, 0);
             else return new Pixel(1, 1, 1);
@@ -634,7 +635,7 @@ namespace LectureImage
                     c++;
                     Console.WriteLine((QR.GetLength(0) - 1 - i) + " " + (QR.GetLength(0) - 1 - k));
                 }
-            }            
+            }
             Console.WriteLine("_");
             for (int i = 11; i >= 0; i--)
             {
@@ -646,13 +647,13 @@ namespace LectureImage
                     Console.WriteLine((QR.GetLength(0) - 1 - i) + " " + (QR.GetLength(0) - 1 - k));
                 }
             }
-            Console.WriteLine("_");           
+            Console.WriteLine("_");
 
             return QR;
         }
 
 
-        public Pixel[,] PlotCarre(Pixel[,] canva,int couleur, int taille, int x, int y)
+        public Pixel[,] PlotCarre(Pixel[,] canva, int couleur, int taille, int x, int y)
         {
             for (int i = 0; i <= taille; i++)
             {
@@ -665,24 +666,23 @@ namespace LectureImage
             }
 
             return canva;
-        } 
+        }
 
         public Pixel[,] Canvas(int hauteur, int largeur)
         {
             Pixel[,] result = new Pixel[hauteur, largeur];
             for (int i = 0; i < hauteur; i++)
-            {               
+            {
                 for (int j = 0; j < largeur; j++)
                 {
                     result[i, j] = new Pixel(1, 1, 1);
-                }           
+                }
             }
             return result;
         }
 
-
-
-    #endregion
-}
+        #endregion
+    }
 }
 
+ 
