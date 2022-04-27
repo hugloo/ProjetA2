@@ -105,7 +105,11 @@ namespace LectureImage
         #endregion
 
         #region Convertions et autres
-
+        /// <summary>
+        /// fonction 
+        /// </summary>
+        /// <param name="entier"></param>
+        /// <returns></returns>
         public byte[] Convertir_Int_To_Endian(int entier)
         {
             byte[] result = BitConverter.GetBytes(entier);
@@ -351,6 +355,10 @@ namespace LectureImage
 
             return product;
         }
+        /// <summary>
+        /// Tourner une image à 90°
+        /// </summary>
+        /// <returns></returns>
         public Pixel[,] Rotation90()
         {
             Pixel[,] result = new Pixel[image.GetLength(1), image.GetLength(0)];
@@ -389,15 +397,19 @@ namespace LectureImage
             Enregistrement(result);
             return result;
         }
+        /// <summary>
+        /// Prend une taille d'image en entrée et fait une fractale bien centrée et proportionnée dessus avec le nombre d'itérations voulues
+        /// </summary>
+        /// <param name="hauteur">hauteur de l'image en pixel</param>
+        /// <param name="largeur">largeur de l'image en pixel</param>
+        /// <param name="itération_max">nombre d'itérations limites</param>
+        /// <returns></returns>
         public Pixel[,] Fractale(int hauteur, int largeur, int itération_max)
         {
-            //on dessine la fractale en entière, les variables suivantes sont la zone où l'on dessine
             double x1 = -2.1;
             double x2 = 0.6;
             double y1 = -1.2;
             double y2 = 1.2;
-
-            // taile de l'image
             double zoom1 = largeur / (x2 - x1);
             double zoom2 = hauteur / (y2 - y1);
             Pixel[,] fractale = new Pixel[hauteur, largeur];
@@ -407,7 +419,7 @@ namespace LectureImage
                 {
                     int itération = 0;
                     Complexe z = new Complexe(0, 0);
-                    Complexe c = new Complexe(i/zoom1 + x1, j/zoom2 + y1);
+                    Complexe c = new Complexe(0.285, 0.01);
                     while (itération < itération_max && z.Norme() < 2)
                     {
                         z = z.Multiplication(z);
@@ -416,7 +428,7 @@ namespace LectureImage
                     }
                     if(itération == itération_max)
                     {
-                        fractale[i, j] = new Pixel(199, 205, 243);
+                        fractale[i, j] = new Pixel(243, 205, 199);
                     }
                     else
                     {
