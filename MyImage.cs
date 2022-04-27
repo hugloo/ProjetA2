@@ -416,7 +416,7 @@ namespace LectureImage
                     }
                     if(itération == itération_max)
                     {
-                        fractale[i, j] = new Pixel(0, 255, 0);
+                        fractale[i, j] = new Pixel(199, 205, 243);
                     }
                     else
                     {

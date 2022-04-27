@@ -15,7 +15,7 @@ namespace LectureImage
         {
             MyImage img = new MyImage("./images/coco.bmp");
             Console.WriteLine(img.toString());
-            img.Fractale(500,500,300);
+            img.Fractale(1000,1000,800);
 
             int[,] flou = { { 1, 1, 1}, { 1, 1, 1 }, { 1, 1, 1}, };
             int[,] bords = { { 0, 1, 0 }, { 1, -4, 1 }, { 0, 1, 0 }, };
