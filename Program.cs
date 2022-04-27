@@ -13,11 +13,16 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/coco.bmp");
+            MyImage img = new MyImage("./images/test.bmp");
             Console.WriteLine(img.toString());
 
             int[] pixels = { 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 };
-            img.resizePixels(400, 403);
+            //img.Graph();
+            //byte[] tab = new byte[] { 97, 5, 0, 0 };
+            //Console.WriteLine(img.Convertir_Endian_To_Int(tab, 0));
+            img.QRCode("HELLO WORLD");
+            //img.Test();
+            //img.Agrandissement(8);
 
 
 
@@ -35,11 +40,22 @@ namespace LectureImage
 
             MyImage output = new MyImage("./images/sortie.bmp");
 
+            Console.WriteLine(output.toString());
+            //output.Agrandissement(8);
             //Console.WriteLine(output.toString());
+
 
             Console.ReadLine();
         }
 
+
+        static void AfficherListe(string[] liste)
+        {
+            for (int i = 0; i < liste.Length; i++)
+            {
+                Console.Write(liste[i] + " ");
+            }
+        }
 
     }
 }

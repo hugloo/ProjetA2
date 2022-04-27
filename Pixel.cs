@@ -23,7 +23,7 @@
             set { value = bleu; }
         }
 
-        public Pixel(int rouge, int vert, int bleu)
+        public Pixel(int bleu, int vert, int rouge)
         {
             this.rouge = rouge;
             this.vert = vert;
