@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Numerics;
+using System.Linq;
 
 namespace LectureImage
 {
@@ -153,7 +150,16 @@ namespace LectureImage
             }
             return result;
         }
-
+        /// <summary>
+        /// Conversion byte en binaire 
+        /// </summary>
+        /// <param name="val">byte en entrée qui va être converti</param>
+        /// <returns></returns>
+        public string ConvertisseurByteBinaire(byte val)
+        {
+            string binaire = Convert.ToString(val, 2).PadLeft(8, '0');
+            return binaire;
+        }
         public List<byte> ModifierHeader(int hauteur, int largeur)
         {
             byte[] hauteur1 = Convertir_Int_To_Endian(hauteur);
@@ -386,11 +392,6 @@ namespace LectureImage
 
             return product;
         }
-
-
-
-
-
         public void Graph()
         {
             int r = 0;
@@ -441,7 +442,106 @@ namespace LectureImage
             ModifierHeader(result.GetLength(0), result.GetLength(1));
             Enregistrement(result);
         }
-
+        /// <summary>
+        /// Prend une taille d'image en entrée et fait une fractale bien centrée et proportionnée dessus avec le nombre d'itérations voulues
+        /// </summary>
+        /// <param name="hauteur">hauteur de l'image en pixel</param>
+        /// <param name="largeur">largeur de l'image en pixel</param>
+        /// <param name="itération_max">nombre d'itérations limites</param>
+        /// <returns></returns>
+        public Pixel[,] Fractale(int hauteur, int largeur, int itération_max)
+        {
+            double x1 = -2.1;
+            double x2 = 0.6;
+            double y1 = -1.2;
+            double y2 = 1.2;
+            double zoom1 = largeur / (x2 - x1);
+            double zoom2 = hauteur / (y2 - y1);
+            Pixel[,] fractale = new Pixel[hauteur, largeur];
+            for (int i = 0; i < hauteur; i++)
+            {
+                for (int j = 0; j < largeur; j++)
+                {
+                    int itération = 0;
+                    Complexe z = new Complexe(0, 0);
+                    Complexe c = new Complexe(i / zoom1 + x1, j / zoom2 + y1);
+                    while (itération < itération_max && z.Norme() < 2)
+                    {
+                        z = z.Multiplication(z);
+                        z = z.Addition(c);
+                        itération++;
+                    }
+                    if (itération == itération_max)
+                    {
+                        fractale[i, j] = new Pixel(243, 205, 199);
+                    }
+                    else
+                    {
+                        fractale[i, j] = new Pixel(0, 0, 0);
+                    }
+                }
+            }
+            ModifierHeader(largeur, hauteur);
+            Enregistrement(fractale);
+            return fractale;
+        }
+        /// <summary>
+        /// Tourner une image à 90°
+        /// </summary>
+        /// <returns></returns>
+        public Pixel[,] Rotation90()
+        {
+            Pixel[,] result = new Pixel[image.GetLength(1), image.GetLength(0)];
+            for (int i = 0; i < image.GetLength(0); i++)
+            {
+                for (int j = 0; j < image.GetLength(1); j++)
+                {
+                    result[image.GetLength(1) - 1 - j, image.GetLength(0) - 1 - i] = image[i, j];
+                }
+            }
+            ModifierHeader(result.GetLength(1), result.GetLength(0));
+            Enregistrement(result);
+            return result;
+        }
+        public byte[,] CacherUneImage(MyImage image2)
+        {
+            if (imgB.GetLength(0) >= image2.imgB.GetLength(0) && imgB.GetLength(1) >= image2.imgB.GetLength(1))
+            {
+                for (int i = 0; i<image2.imgB.GetLength(0); i++)
+                {
+                    for (int j=0;j<image2.imgB.GetLength(1); j++)
+                    {
+                        string binaire = ConvertisseurByteBinaire(imgB[i, j]);
+                        string binaire2 = ConvertisseurByteBinaire(image2.imgB[i, j]);
+                        string result = binaire.Substring(0, 4) + binaire2.Substring(0, 4);
+                        int val = Convert.ToInt32(result, 2);
+                        byte resultat = Convert.ToByte(val);
+                        imgB[i, j] = resultat;
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Veuillez choisir une image à cacher plus petite ou de même taille que l'image qui cache");
+            }
+            ModifierHeader(imgB.GetLength(0), imgB.GetLength(1));
+            return imgB;
+        }
+        public byte[,] RetrouverUneImage()
+        {
+            for(int i =0;i<imgB.GetLength(0);i++)
+            {
+                for(int j=0;j<imgB.GetLength(1);j++)
+                {
+                    string binaire = ConvertisseurByteBinaire(imgB[i, j]);
+                    string result = binaire.Substring(4, 8) + binaire.Substring(0, 4);
+                    int val = Convert.ToInt32(result, 2);
+                    byte resultat = Convert.ToByte(val);
+                    imgB[i, j] = resultat;
+                }
+            }
+            return imgB;
+        }
 
         #region QR CODE
 
@@ -586,7 +686,7 @@ namespace LectureImage
 
                 }
             }
-                        
+
 
             for (int i = 8; i < x2; i++) //motifs de synchronisation 
             {
@@ -689,4 +789,4 @@ namespace LectureImage
     }
 }
 
- 
+

@@ -13,29 +13,20 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-<<<<<<< HEAD
-            MyImage img = new MyImage("./images/Test2.bmp");
+            MyImage img = new MyImage("./images/coco.bmp");
+            MyImage img2 = new MyImage("./images/Test.bmp");
             Console.WriteLine(img.toString());
-            img.Fractale(1000,1000,100);
-=======
-            MyImage img = new MyImage("./images/test.bmp");
-            Console.WriteLine(img.toString());
-<<<<<<< HEAD
+            img.CacherUneImage(img2);
+            /*img.Fractale(1000,1000,100);
 
-            int[] pixels = { 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 };
+
+            //int[] pixels = { 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 };
             //img.Graph();
             //byte[] tab = new byte[] { 97, 5, 0, 0 };
             //Console.WriteLine(img.Convertir_Endian_To_Int(tab, 0));
-            img.QRCode("HELLO WORLD");
+            //img.QRCode("HELLO WORLD");
             //img.Test();
             //img.Agrandissement(8);
-
-
-
-=======
-            img.Fractale(1000,1000,800);
->>>>>>> 9dbc2fd733b00927e6bfc9f1ca283e269d2eb322
->>>>>>> 58e9c8b9c692b091997da5357209f3004acea2d6
 
             int[,] flou = { { 1, 1, 1}, { 1, 1, 1 }, { 1, 1, 1}, };
             int[,] bords = { { 0, 1, 0 }, { 1, -4, 1 }, { 0, 1, 0 }, };
@@ -46,11 +37,11 @@ namespace LectureImage
             int[,] repoussage = { { -2, -1, 0}, { -1, 1, 1}, { 0, 1, 2 } };
             float[,] ker = { { 1/16, 1/8, 1/16 }, { 1 / 16, 1 / 4, 1 / 16 }, { 1 / 16, 1 / 8, 1 / 16 } };
 
-<<<<<<< HEAD
+
             //img.MatriceDeConvultion(repoussage);
-=======
-            //img.MatriceDeConvultion(flou);
->>>>>>> 9dbc2fd733b00927e6bfc9f1ca283e269d2eb322
+
+            //img.MatriceDeConvultion(flou);*/
+
 
             MyImage output = new MyImage("./images/sortie.bmp");
 
