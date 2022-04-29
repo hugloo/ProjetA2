@@ -13,11 +13,12 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/coco.bmp");
+            MyImage img = new MyImage("./images/lena.bmp");
             MyImage img2 = new MyImage("./images/Test.bmp");
             Console.WriteLine(img.toString());
             img.CacherUneImage(img2);
-            /*img.Fractale(1000,1000,100);
+            //img.Fractale(1000,1000,100);
+            //img.Innovation();
 
 
             //int[] pixels = { 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 };
@@ -44,7 +45,8 @@ namespace LectureImage
 
 
             MyImage output = new MyImage("./images/sortie.bmp");
-
+            output.RetrouverUneImage();
+            output = new MyImage("./images/sortie.bmp");
             Console.WriteLine(output.toString());
             //output.Agrandissement(8);
             //Console.WriteLine(output.toString());

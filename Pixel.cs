@@ -23,7 +23,7 @@
             set { value = bleu; }
         }
 
-        public Pixel(int bleu, int vert, int rouge)
+        public Pixel(int rouge, int vert, int bleu)
         {
             this.rouge = rouge;
             this.vert = vert;
@@ -94,10 +94,22 @@
             if (bleu >= 128) bleu = 255;            
             else bleu = 0;
            
+            return new Pixel(bleu, vert, rouge);
+        }
+        public Pixel Innovation()
+        {
+            if (rouge >= vert && rouge >= bleu) rouge = 255;
+            else rouge = 0;
+
+            if (vert >= rouge && vert >= bleu) vert = 255;
+            else vert = 0;
+
+            if (bleu >= vert && bleu >= rouge) bleu = 255;
+            else bleu = 0;
+
             return new Pixel(rouge, vert, bleu);
         }
-
         
         
-}
+    }
 }

@@ -35,7 +35,7 @@ namespace LectureImage
 
         #endregion
 
-        #region Consrtucteurs et toString()
+        #region Constructeurs et toString()
         public MyImage(string fichier)
         {
             this.fichier = fichier;
@@ -78,7 +78,6 @@ namespace LectureImage
                 }
             }
         }
-
         public string toString()
         {
             string str = "";
@@ -309,7 +308,19 @@ namespace LectureImage
             }
             Enregistrement(result);
         }
+        public void Innovation()
+        {
+            Pixel[,] result = new Pixel[height, width];
 
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    result[i, j] = image[i, j].Innovation();
+                }
+            }
+            Enregistrement(result);
+        }
         public void NoirEtBlanc()
         {
             Pixel[,] img = new Pixel[height, width];
@@ -362,7 +373,6 @@ namespace LectureImage
             //ModifierHeader(result.GetLength(0), result.GetLength(1));
             Enregistrement(result);
         }
-
         public static int[,] Dot(int[,] matrix1, int[,] matrix2)
         {
             // cahing matrix lengths for better performance  
@@ -451,10 +461,12 @@ namespace LectureImage
         /// <returns></returns>
         public Pixel[,] Fractale(int hauteur, int largeur, int itération_max)
         {
+            //délimite la zone où l'on va dessiner
             double x1 = -2.1;
             double x2 = 0.6;
             double y1 = -1.2;
             double y2 = 1.2;
+            //l'endroit où l'on zoom, si on change ces valeurs pour un gros nombre la fractale n'est plus centrée et on en voit qu'un morceau, elle est trop zoomé
             double zoom1 = largeur / (x2 - x1);
             double zoom2 = hauteur / (y2 - y1);
             Pixel[,] fractale = new Pixel[hauteur, largeur];
@@ -473,11 +485,11 @@ namespace LectureImage
                     }
                     if (itération == itération_max)
                     {
-                        fractale[i, j] = new Pixel(243, 205, 199);
+                        fractale[i, j] = new Pixel(0,0,0);
                     }
                     else
                     {
-                        fractale[i, j] = new Pixel(0, 0, 0);
+                        fractale[i, j] = new Pixel((int)itération * 255 / itération_max, 0, 0);
                     }
                 }
             }
@@ -503,44 +515,58 @@ namespace LectureImage
             Enregistrement(result);
             return result;
         }
-        public byte[,] CacherUneImage(MyImage image2)
+        public Pixel[,] CacherUneImage(MyImage image2)
         {
-            if (imgB.GetLength(0) >= image2.imgB.GetLength(0) && imgB.GetLength(1) >= image2.imgB.GetLength(1))
+            if (image.GetLength(0) >= image2.image.GetLength(0) && image.GetLength(1) >= image2.image.GetLength(1))
             {
-                for (int i = 0; i<image2.imgB.GetLength(0); i++)
+                for (int i = 0; i < image2.image.GetLength(0); i++)
                 {
-                    for (int j=0;j<image2.imgB.GetLength(1); j++)
+                    for (int j = 0; j < image2.image.GetLength(1); j++)
                     {
-                        string binaire = ConvertisseurByteBinaire(imgB[i, j]);
-                        string binaire2 = ConvertisseurByteBinaire(image2.imgB[i, j]);
-                        string result = binaire.Substring(0, 4) + binaire2.Substring(0, 4);
-                        int val = Convert.ToInt32(result, 2);
-                        byte resultat = Convert.ToByte(val);
-                        imgB[i, j] = resultat;
+                        string rouge1 = Convert.ToString(image[i, j].Rouge, 2).PadLeft(4, '0');
+                        string bleu1 = Convert.ToString(image[i, j].Bleu, 2).PadLeft(4, '0');
+                        string vert1 = Convert.ToString(image[i, j].Vert, 2).PadLeft(4, '0');
+                        string rouge2 = Convert.ToString(image2.image[i, j].Rouge, 2).PadLeft(4,'0');
+                        string bleu2 = Convert.ToString(image2.image[i, j].Bleu, 2).PadLeft(4, '0');
+                        string vert2 = Convert.ToString(image2.image[i, j].Vert, 2).PadLeft(4, '0');
+                        string rougefinal = rouge1.Substring(0, 4) + rouge2.Substring(0, 4);//problème de taille il faut être sur qu'il y a 8bits
+                        string bleufinal = bleu1.Substring(0, 4) + bleu2.Substring(0, 4);
+                        string vertfinal = vert1.Substring(0, 4) + vert2.Substring(0, 4);
+                        int val_rouge = Convert.ToInt32(rougefinal, 2);
+                        int val_bleu = Convert.ToInt32(bleufinal, 2);
+                        int val_vert = Convert.ToInt32(vertfinal, 2);
+                        image[i, j] = new Pixel(val_bleu, val_vert, val_rouge);
                     }
                 }
             }
             else
             {
                 Console.WriteLine("Veuillez choisir une image à cacher plus petite ou de même taille que l'image qui cache");
-            }
-            ModifierHeader(imgB.GetLength(0), imgB.GetLength(1));
-            return imgB;
+            } 
+            Enregistrement(image);
+            return image;
         }
-        public byte[,] RetrouverUneImage()
+        public Pixel[,] RetrouverUneImage()
         {
-            for(int i =0;i<imgB.GetLength(0);i++)
+            for(int i =0;i<image.GetLength(0);i++)
             {
-                for(int j=0;j<imgB.GetLength(1);j++)
+                for(int j=0;j<image.GetLength(1);j++)
                 {
-                    string binaire = ConvertisseurByteBinaire(imgB[i, j]);
-                    string result = binaire.Substring(4, 8) + binaire.Substring(0, 4);
-                    int val = Convert.ToInt32(result, 2);
-                    byte resultat = Convert.ToByte(val);
-                    imgB[i, j] = resultat;
+                    string rouge1 = Convert.ToString(image[i, j].Rouge, 2).PadLeft(8, '0');
+                    string bleu1 = Convert.ToString(image[i, j].Bleu, 2).PadLeft(8, '0');
+                    string vert1 = Convert.ToString(image[i, j].Vert, 2).PadLeft(8, '0');
+                    string rougefinal = rouge1.Substring(4) + rouge1.Substring(0,4);
+                    string bleufinal = bleu1.Substring(4) + bleu1.Substring(0,4);
+                    string vertfinal = vert1.Substring(4) + vert1.Substring(0,4);
+                    int val_rouge = Convert.ToInt32(rougefinal, 2);
+                    int val_bleu = Convert.ToInt32(bleufinal, 2);
+                    int val_vert = Convert.ToInt32(vertfinal, 2);
+                    image[i, j] = new Pixel(val_rouge, val_vert, val_bleu);
                 }
             }
-            return imgB;
+            ModifierHeader(image.GetLength(0), image.GetLength(1));
+            Enregistrement(image);
+            return image;
         }
 
         #region QR CODE
