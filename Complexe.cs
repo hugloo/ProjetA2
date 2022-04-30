@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LectureImage
 {
@@ -31,14 +27,14 @@ namespace LectureImage
         }
         public Complexe Addition(Complexe z)
         {
-            Complexe somme = new Complexe(0,0);
+            Complexe somme = new Complexe(0, 0);
             somme.reel = reel + z.reel;
             somme.imaginaire = imaginaire + z.imaginaire;
             return somme;
         }
         public Complexe Soustraction(Complexe z)
         {
-            Complexe difference = new Complexe(0,0);
+            Complexe difference = new Complexe(0, 0);
             difference.reel = reel - z.reel;
             difference.imaginaire = imaginaire - z.imaginaire;
             return difference;
@@ -53,8 +49,8 @@ namespace LectureImage
         public double Norme()
         {
             double norme = 0;
-            norme = Math.Sqrt(reel * reel + imaginaire*imaginaire);
-            return norme; 
+            norme = Math.Sqrt(reel * reel + imaginaire * imaginaire);
+            return norme;
         }
     }
 }

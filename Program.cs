@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Diagnostics;
 
 namespace LectureImage
 {
@@ -13,11 +7,15 @@ namespace LectureImage
 
         static void Main(string[] args)
         {
-            MyImage img = new MyImage("./images/lena.bmp");
-            MyImage img2 = new MyImage("./images/Test.bmp");
+            MyImage img = new MyImage("./images/coco.bmp");
+            //MyImage img2 = new MyImage("./images/coco.bmp");
+            //MyImage img2 = new MyImage("./images/Test.bmp");
             Console.WriteLine(img.toString());
-            img.CacherUneImage(img2);
-            //img.Fractale(1000,1000,100);
+            img.RotationQuelconque(90);
+            //img.Innovation();
+            //img.CacherUneImage(img2);
+            //img.Fractale(1000,1000,200);
+            
             //img.Innovation();
 
 
@@ -29,14 +27,14 @@ namespace LectureImage
             //img.Test();
             //img.Agrandissement(8);
 
-            int[,] flou = { { 1, 1, 1}, { 1, 1, 1 }, { 1, 1, 1}, };
+            int[,] flou = { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 }, };
             int[,] bords = { { 0, 1, 0 }, { 1, -4, 1 }, { 0, 1, 0 }, };
-            int[,] contraste = { { 0, -1, 0}, {-1, 5, -1 } , { 0, -1, 0 } };
+            int[,] contraste = { { 0, -1, 0 }, { -1, 5, -1 }, { 0, -1, 0 } };
 
-            int[,] flou2 = { { 1/9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 } };
+            int[,] flou2 = { { 1 / 9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 }, { 1 / 9, 1 / 9, 1 / 9 } };
             int[,] décalage_une_ligne_pixel_bas = { { 0, 1, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
-            int[,] repoussage = { { -2, -1, 0}, { -1, 1, 1}, { 0, 1, 2 } };
-            float[,] ker = { { 1/16, 1/8, 1/16 }, { 1 / 16, 1 / 4, 1 / 16 }, { 1 / 16, 1 / 8, 1 / 16 } };
+            int[,] repoussage = { { -2, -1, 0 }, { -1, 1, 1 }, { 0, 1, 2 } };
+            float[,] ker = { { 1 / 16, 1 / 8, 1 / 16 }, { 1 / 16, 1 / 4, 1 / 16 }, { 1 / 16, 1 / 8, 1 / 16 } };
 
 
             //img.MatriceDeConvultion(repoussage);

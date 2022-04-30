@@ -85,31 +85,31 @@
         }
         public Pixel NoirBlanc()
         {
-            if (rouge >= 128) rouge = 255;            
+            if (rouge >= 128) rouge = 255;
             else rouge = 0;
-            
-            if (vert >= 128) vert = 255;            
+
+            if (vert >= 128) vert = 255;
             else vert = 0;
-            
-            if (bleu >= 128) bleu = 255;            
+
+            if (bleu >= 128) bleu = 255;
             else bleu = 0;
-           
+
             return new Pixel(bleu, vert, rouge);
         }
         public Pixel Innovation()
         {
-            if (rouge >= vert && rouge >= bleu) rouge = 255;
-            else rouge = 0;
+            int reserve_rouge = 0;
+            int reserve_vert = 0;
+            int reserve_bleu = 0;
+            if (rouge >= vert && rouge >= bleu) reserve_rouge = 255;
 
-            if (vert >= rouge && vert >= bleu) vert = 255;
-            else vert = 0;
+            if (vert >= rouge && vert >= bleu) reserve_vert = 255;
 
-            if (bleu >= vert && bleu >= rouge) bleu = 255;
-            else bleu = 0;
+            if (bleu >= vert && bleu >= rouge) reserve_bleu = 255;
 
-            return new Pixel(rouge, vert, bleu);
+            return new Pixel(reserve_rouge, reserve_vert, reserve_bleu);
         }
-        
-        
+
+
     }
 }

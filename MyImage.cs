@@ -128,7 +128,10 @@ namespace LectureImage
             }
             return result;
         }
-
+        public double ConvertirDegrésRadians(double degrés)
+        {
+            return (Math.PI / 180) * degrés;
+        }
         public void Enregistrement(Pixel[,] result)
         {
             File.WriteAllBytes("./Images/Sortie.bmp", header.Concat(PixelToByte(result)).ToArray());
@@ -148,16 +151,6 @@ namespace LectureImage
 
             }
             return result;
-        }
-        /// <summary>
-        /// Conversion byte en binaire 
-        /// </summary>
-        /// <param name="val">byte en entrée qui va être converti</param>
-        /// <returns></returns>
-        public string ConvertisseurByteBinaire(byte val)
-        {
-            string binaire = Convert.ToString(val, 2).PadLeft(8, '0');
-            return binaire;
         }
         public List<byte> ModifierHeader(int hauteur, int largeur)
         {
@@ -485,7 +478,7 @@ namespace LectureImage
                     }
                     if (itération == itération_max)
                     {
-                        fractale[i, j] = new Pixel(0,0,0);
+                        fractale[i, j] = new Pixel(0, 0, 0);
                     }
                     else
                     {
@@ -504,13 +497,14 @@ namespace LectureImage
         public Pixel[,] Rotation90()
         {
             Pixel[,] result = new Pixel[image.GetLength(1), image.GetLength(0)];
-            for (int i = 0; i < image.GetLength(0); i++)
-            {
-                for (int j = 0; j < image.GetLength(1); j++)
+
+                for (int i = 0; i < image.GetLength(0); i++)
                 {
-                    result[image.GetLength(1) - 1 - j, image.GetLength(0) - 1 - i] = image[i, j];
+                    for (int j = 0; j < image.GetLength(1); j++)
+                    {
+                        result[image.GetLength(1) - 1 - j, image.GetLength(0) - 1 - i] = image[i, j];
+                    }
                 }
-            }
             ModifierHeader(result.GetLength(1), result.GetLength(0));
             Enregistrement(result);
             return result;
@@ -523,41 +517,41 @@ namespace LectureImage
                 {
                     for (int j = 0; j < image2.image.GetLength(1); j++)
                     {
-                        string rouge1 = Convert.ToString(image[i, j].Rouge, 2).PadLeft(4, '0');
-                        string bleu1 = Convert.ToString(image[i, j].Bleu, 2).PadLeft(4, '0');
-                        string vert1 = Convert.ToString(image[i, j].Vert, 2).PadLeft(4, '0');
-                        string rouge2 = Convert.ToString(image2.image[i, j].Rouge, 2).PadLeft(4,'0');
-                        string bleu2 = Convert.ToString(image2.image[i, j].Bleu, 2).PadLeft(4, '0');
-                        string vert2 = Convert.ToString(image2.image[i, j].Vert, 2).PadLeft(4, '0');
-                        string rougefinal = rouge1.Substring(0, 4) + rouge2.Substring(0, 4);//problème de taille il faut être sur qu'il y a 8bits
+                        string rouge1 = Convert.ToString(image[i, j].Rouge, 2).PadLeft(8, '0');
+                        string bleu1 = Convert.ToString(image[i, j].Bleu, 2).PadLeft(8, '0');
+                        string vert1 = Convert.ToString(image[i, j].Vert, 2).PadLeft(8, '0');
+                        string rouge2 = Convert.ToString(image2.image[i, j].Rouge, 2).PadLeft(8, '0');
+                        string bleu2 = Convert.ToString(image2.image[i, j].Bleu, 2).PadLeft(8, '0');
+                        string vert2 = Convert.ToString(image2.image[i, j].Vert, 2).PadLeft(8, '0');
+                        string rougefinal = rouge1.Substring(0, 4) + rouge2.Substring(0, 4);
                         string bleufinal = bleu1.Substring(0, 4) + bleu2.Substring(0, 4);
                         string vertfinal = vert1.Substring(0, 4) + vert2.Substring(0, 4);
                         int val_rouge = Convert.ToInt32(rougefinal, 2);
                         int val_bleu = Convert.ToInt32(bleufinal, 2);
                         int val_vert = Convert.ToInt32(vertfinal, 2);
-                        image[i, j] = new Pixel(val_bleu, val_vert, val_rouge);
+                        image[i, j] = new Pixel(val_rouge, val_vert, val_bleu);
                     }
                 }
             }
             else
             {
                 Console.WriteLine("Veuillez choisir une image à cacher plus petite ou de même taille que l'image qui cache");
-            } 
+            }
             Enregistrement(image);
             return image;
         }
         public Pixel[,] RetrouverUneImage()
         {
-            for(int i =0;i<image.GetLength(0);i++)
+            for (int i = 0; i < image.GetLength(0); i++)
             {
-                for(int j=0;j<image.GetLength(1);j++)
+                for (int j = 0; j < image.GetLength(1); j++)
                 {
                     string rouge1 = Convert.ToString(image[i, j].Rouge, 2).PadLeft(8, '0');
                     string bleu1 = Convert.ToString(image[i, j].Bleu, 2).PadLeft(8, '0');
                     string vert1 = Convert.ToString(image[i, j].Vert, 2).PadLeft(8, '0');
-                    string rougefinal = rouge1.Substring(4) + rouge1.Substring(0,4);
-                    string bleufinal = bleu1.Substring(4) + bleu1.Substring(0,4);
-                    string vertfinal = vert1.Substring(4) + vert1.Substring(0,4);
+                    string rougefinal = rouge1.Substring(4) + rouge1.Substring(0, 4);
+                    string bleufinal = bleu1.Substring(4) + bleu1.Substring(0, 4);
+                    string vertfinal = vert1.Substring(4) + vert1.Substring(0, 4);
                     int val_rouge = Convert.ToInt32(rougefinal, 2);
                     int val_bleu = Convert.ToInt32(bleufinal, 2);
                     int val_vert = Convert.ToInt32(vertfinal, 2);
@@ -568,7 +562,40 @@ namespace LectureImage
             Enregistrement(image);
             return image;
         }
-
+        public Pixel[,] RotationQuelconque(double degrés)
+        {
+            double angle = ConvertirDegrésRadians(degrés);
+            Pixel[,] resultat = new Pixel[1,1];
+            int référentiel_centre_x1 = 0;
+            int référentiel_centre_y1 = 0;
+            double référentiel_centre_x2 = 0;
+            double référentiel_centre_y2 = 0;
+            double nouvelle_position_x = 0;
+            double nouvelle_position_y = 0;
+                resultat = new Pixel[(int) (Math.Sin(angle) * image.GetLength(1) + image.GetLength(0) * Math.Cos(angle)), (int)(Math.Sin(angle) * image.GetLength(0) + image.GetLength(0) * Math.Cos(angle) * image.GetLength(1))];
+                for(int i = 0; i < resultat.GetLength(0); i++)
+                {
+                    for(int j = 0; j < resultat.GetLength(1); j++)
+                    {
+                        resultat[i, j] = new Pixel(0, 0, 0);
+                    }
+                }
+                for (int i = 0; i < image.GetLength(0); i++)
+                {
+                    for (int j = 0; j < image.GetLength(1); j++)
+                    {
+                    /*référentiel_centre_x1 = i - height/2; //on se place au centre de l'image initiale et on regarde par rapport à là
+                    référentiel_centre_y1 = j - width/2; //on se place au centre de l'image initiale et on regarde par rapport à là
+                    référentiel_centre_x2 = référentiel_centre_x1 * Math.Cos(angle) - référentiel_centre_y1 * Math.Sin(angle); //avec matrice de rotation,
+                    référentiel_centre_y2 = référentiel_centre_x1 * Math.Sin(angle) + référentiel_centre_y1 * Math.Cos(angle); //c'est l'emplacement du pixel dans l'image tournée mais par rapport au centre de la nouvelle image
+                    nouvelle_position_x = référentiel_centre_x2 + (Math.Sin(angle) * image.GetLength(1) + image.GetLength(0) * Math.Cos(angle)) / 2; //on retourne dans le coin haut gauche de la nouvelle image
+                    nouvelle_position_y = référentiel_centre_y2 + (Math.Sin(angle) * image.GetLength(0) + image.GetLength(0) * Math.Cos(angle) * image.GetLength(1)) / 2;
+                    resultat[(int) nouvelle_position_x,(int) nouvelle_position_y] = image[i, j];*/
+                    resultat[(int)((i - image.GetLength(0)/2) * Math.Cos(angle) - (j - image.GetLength(1)/2) * Math.Sin(angle) + (Math.Sin(angle) * image.GetLength(1) + image.GetLength(0) * Math.Cos(angle)) / 2), (int)((i - image.GetLength(0)/2) * Math.Sin(angle) + (j - image.GetLength(1)/2) * Math.Cos(angle) + (Math.Sin(angle) * image.GetLength(0) + image.GetLength(0) * Math.Cos(angle) * image.GetLength(1)) / 2)] = image[i, j];
+                    }
+                }
+                return resultat;
+        }
         #region QR CODE
 
         /// <summary>
