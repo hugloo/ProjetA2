@@ -565,14 +565,13 @@ namespace LectureImage
         public Pixel[,] RotationQuelconque(double degrés)
         {
             double angle = ConvertirDegrésRadians(degrés);
-            Pixel[,] resultat = new Pixel[1,1];
+            Pixel[,] resultat = new Pixel[(int)Math.Ceiling(Math.Sin(angle) * image.GetLength(1) + image.GetLength(0) * Math.Cos(angle)) + 1, (int)Math.Ceiling(Math.Sin(angle) * image.GetLength(0) + Math.Cos(angle) * image.GetLength(1)) + 1]; ;
             int référentiel_centre_x1 = 0;
             int référentiel_centre_y1 = 0;
             double référentiel_centre_x2 = 0;
             double référentiel_centre_y2 = 0;
             double nouvelle_position_x = 0;
             double nouvelle_position_y = 0;
-                resultat = new Pixel[(int) (Math.Sin(angle) * image.GetLength(1) + image.GetLength(0) * Math.Cos(angle)), (int)(Math.Sin(angle) * image.GetLength(0) + image.GetLength(0) * Math.Cos(angle) * image.GetLength(1))];
                 for(int i = 0; i < resultat.GetLength(0); i++)
                 {
                     for(int j = 0; j < resultat.GetLength(1); j++)
@@ -582,19 +581,21 @@ namespace LectureImage
                 }
                 for (int i = 0; i < image.GetLength(0); i++)
                 {
-                    for (int j = 0; j < image.GetLength(1); j++)
+                    for (int j = 0; j < image.GetLength(1)-1; j++)
                     {
-                    /*référentiel_centre_x1 = i - height/2; //on se place au centre de l'image initiale et on regarde par rapport à là
-                    référentiel_centre_y1 = j - width/2; //on se place au centre de l'image initiale et on regarde par rapport à là
+                    référentiel_centre_x1 = i - image.GetLength(0)/2; //on se place au centre de l'image initiale et on regarde par rapport à là
+                    référentiel_centre_y1 = j - image.GetLength(1)/2; //on se place au centre de l'image initiale et on regarde par rapport à là
                     référentiel_centre_x2 = référentiel_centre_x1 * Math.Cos(angle) - référentiel_centre_y1 * Math.Sin(angle); //avec matrice de rotation,
                     référentiel_centre_y2 = référentiel_centre_x1 * Math.Sin(angle) + référentiel_centre_y1 * Math.Cos(angle); //c'est l'emplacement du pixel dans l'image tournée mais par rapport au centre de la nouvelle image
                     nouvelle_position_x = référentiel_centre_x2 + (Math.Sin(angle) * image.GetLength(1) + image.GetLength(0) * Math.Cos(angle)) / 2; //on retourne dans le coin haut gauche de la nouvelle image
-                    nouvelle_position_y = référentiel_centre_y2 + (Math.Sin(angle) * image.GetLength(0) + image.GetLength(0) * Math.Cos(angle) * image.GetLength(1)) / 2;
-                    resultat[(int) nouvelle_position_x,(int) nouvelle_position_y] = image[i, j];*/
-                    resultat[(int)((i - image.GetLength(0)/2) * Math.Cos(angle) - (j - image.GetLength(1)/2) * Math.Sin(angle) + (Math.Sin(angle) * image.GetLength(1) + image.GetLength(0) * Math.Cos(angle)) / 2), (int)((i - image.GetLength(0)/2) * Math.Sin(angle) + (j - image.GetLength(1)/2) * Math.Cos(angle) + (Math.Sin(angle) * image.GetLength(0) + image.GetLength(0) * Math.Cos(angle) * image.GetLength(1)) / 2)] = image[i, j];
+                    nouvelle_position_y = référentiel_centre_y2 + (Math.Sin(angle) * image.GetLength(0) + Math.Cos(angle) * image.GetLength(1)) / 2;
+                    resultat[(int)Math.Ceiling(nouvelle_position_x),(int)Math.Ceiling(nouvelle_position_y)] = image[i, j];
+                    //resultat[(int)((i - image.GetLength(0)/2) * Math.Cos(angle) - (j - image.GetLength(1)/2) * Math.Sin(angle) + (Math.Sin(angle) * image.GetLength(1) + image.GetLength(0) * Math.Cos(angle)) / 2), (int)((i - image.GetLength(0)/2) * Math.Sin(angle) + (j - image.GetLength(1)/2) * Math.Cos(angle) + (Math.Sin(angle) * image.GetLength(0) + Math.Cos(angle) * image.GetLength(1)) / 2)] = image[i, j];
                     }
                 }
-                return resultat;
+            ModifierHeader(resultat.GetLength(0), resultat.GetLength(1));
+            Enregistrement(resultat);
+            return resultat;
         }
         #region QR CODE
 

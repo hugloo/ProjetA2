@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Complexe.cs" />
-    <Compile Include="Module.cs" />
     <Compile Include="MyImage.cs" />
     <Compile Include="Pixel.cs" />
     <Compile Include="Program.cs" />
