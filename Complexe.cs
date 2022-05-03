@@ -2,7 +2,7 @@
 
 namespace LectureImage
 {
-    class Complexe
+    public class Complexe
     {
         double reel;
         double imaginaire;
@@ -16,6 +16,7 @@ namespace LectureImage
             get { return imaginaire; }
             set { value = imaginaire; }
         }
+
         public Complexe(double reel, double imaginaire)
         {
             this.reel = reel;

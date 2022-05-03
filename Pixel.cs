@@ -1,6 +1,6 @@
 ﻿namespace LectureImage
 {
-    class Pixel
+    public class Pixel
     {
         int rouge;
         int vert;

@@ -5,7 +5,10 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LectureImage", "LectureImage.csproj", "{758FEF27-F6A3-46BA-B600-A13880A3AB9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "..\TestProject\TestProject.csproj", "{8DF311F8-8B5A-4E2E-AFF9-02548999F482}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject", "..\TestProject\TestProject.csproj", "{8DF311F8-8B5A-4E2E-AFF9-02548999F482}"
+	ProjectSection(ProjectDependencies) = postProject
+		{758FEF27-F6A3-46BA-B600-A13880A3AB9B} = {758FEF27-F6A3-46BA-B600-A13880A3AB9B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

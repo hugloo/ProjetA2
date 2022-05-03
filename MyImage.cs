@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LectureImage
 {
-    class MyImage
+    public class MyImage
     {
         string fichier;
         int height = 0; //number of lines
@@ -32,7 +32,14 @@ namespace LectureImage
         {
             get { return width; }
         }
-
+        public byte[,] ImgB
+        {
+            get { return imgB; }
+        }
+        public Pixel[,] Image
+        {
+            get { return image; }
+        }
         #endregion
 
         #region Constructeurs et toString()
